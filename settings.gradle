@@ -1,13 +1,15 @@
 rootProject.name = 'osh-sensors'
 gradle.ext.oshCoreDir = "$rootDir/../osh-core"
 gradle.ext.oshCommDir = "$rootDir/../osh-comm"
+gradle.ext.oshProcessDir = "$rootDir/../osh-processing"
 
 // include osh-core and osh-comm builds only if not part of larger build
 // this is needed to avoid nested composite builds
 // comment this to build against published artifacts
 if (gradle.parent == null) {
   includeBuild gradle.oshCoreDir
-  includeBuild gradle.oshCommDir
+  includeBuild gradle.oshCommDir  
+  includeBuild gradle.oshProcessDir // only required because processing in Trupulse driver 
 }
   
 // include all folders with build.gradle as subprojects
