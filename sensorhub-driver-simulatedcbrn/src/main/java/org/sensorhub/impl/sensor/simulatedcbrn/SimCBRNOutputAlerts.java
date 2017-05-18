@@ -131,6 +131,7 @@ public class SimCBRNOutputAlerts extends AbstractSensorOutput<SimCBRNSensor>
         // Temperature
         cbrnAlertData.addComponent("temp", fac.newQuantity("http://sensorml.com/ont/swe/property/Temperature", null, null, "Cel"));
 
+        cbrnEncoding = fac.newTextEncoding(",", "\n");
     }
 
     // will need to do some of the simulation here save for later

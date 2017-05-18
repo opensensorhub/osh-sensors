@@ -92,6 +92,7 @@ public class SimCBRNOutputMaintenance extends AbstractSensorOutput<SimCBRNSensor
 		maint_Usage.setConstraint(usageInterval);
 		cbrnMaintData.addComponent("usage", maint_Usage);
 
+		cbrnEncoding = fac.newTextEncoding(",", "\n");
 
 	}
 	// will need to do some of the simulation here save for later

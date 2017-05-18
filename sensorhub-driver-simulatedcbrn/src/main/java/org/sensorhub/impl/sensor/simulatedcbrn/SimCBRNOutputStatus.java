@@ -72,7 +72,7 @@ public class SimCBRNOutputStatus extends AbstractSensorOutput<SimCBRNSensor>
 		cbrnStatusData.addComponent("need_maintenance", fac.newBoolean("http://sensorml.com/ont/swe/property/MaintenanceNeeded", null, null) );
 		cbrnStatusData.addComponent("NAK_status", fac.newText("http://sensorml.com/ont/swe/property/NAK_Details", null,null));
 
-
+		cbrnEncoding = fac.newTextEncoding(",", "\n");
 
 	}
 	// will need to do some of the simulation here save for later

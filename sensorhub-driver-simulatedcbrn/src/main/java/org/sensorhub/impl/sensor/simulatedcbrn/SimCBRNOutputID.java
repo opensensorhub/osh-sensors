@@ -80,6 +80,8 @@ public class SimCBRNOutputID extends AbstractSensorOutput<SimCBRNSensor>
 		poc_info.addField("poc_address", fac.newText("http://sensorml.com/ont/swe/property/Address", null, null));
 		cbrnIDData.addComponent("maint_poc", poc_info);
 
+		cbrnEncoding = fac.newTextEncoding(",", "\n");
+
 	}
 	// will need to do some of the simulation here save for later
 	private void sendMeasurement()

@@ -131,7 +131,7 @@ public class TestSimCBRN implements IEventListener
 
 		synchronized (this)
 		{
-			while (sampleCount < 100)
+			while (sampleCount < 20)
 				wait();
 		}
 
