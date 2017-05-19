@@ -62,8 +62,8 @@ public class SimCBRNOutputID extends AbstractSensorOutput<SimCBRNSensor>
 		// Build SWE Common record structure
 		cbrnIDData = fac.newDataRecord(4);
 		cbrnIDData.setName(getName());
-		cbrnIDData.setDefinition("http://sensorml.com/ont/swe/property/ToxicAgent");
-		cbrnIDData.setDescription("CBRN measurements");
+//		cbrnIDData.setDefinition("http://sensorml.com/ont/swe/property/ToxicAgent");
+//		cbrnIDData.setDescription("CBRN measurements");
 
 		// Add fields
 		cbrnIDData.addComponent("time", fac.newTimeStampIsoUTC());

@@ -61,8 +61,8 @@ public class SimCBRNOutputStatus extends AbstractSensorOutput<SimCBRNSensor>
 		// Build SWE Common record structure
 		cbrnStatusData = fac.newDataRecord(6);
 		cbrnStatusData.setName(getName());
-		cbrnStatusData.setDefinition("http://sensorml.com/ont/swe/property/ToxicAgent");
-		cbrnStatusData.setDescription("CBRN measurements");
+//		cbrnStatusData.setDefinition("http://sensorml.com/ont/swe/property/ToxicAgent");
+//		cbrnStatusData.setDescription("CBRN measurements");
 
 		// Add fields
 		cbrnStatusData.addComponent("time", fac.newTimeStampIsoUTC());

@@ -68,11 +68,13 @@ public class SimCBRNOutputAlerts extends AbstractSensorOutput<SimCBRNSensor>
         cbrnAlertData.setDefinition("http://sensorml.com/ont/swe/property/ToxicAgent");
         cbrnAlertData.setDescription("CBRN measurements");
 
+
         // Add fields
         cbrnAlertData.addComponent("time", fac.newTimeStampIsoUTC());
         cbrnAlertData.addComponent("id", fac.newCategory("http://sensorml.com/ont/swe/property/SensorID",null,null,"http://sensorml.com/ont/swe/property/sensorRegistry"));
 
         // To set up the event alert, must add set of allowed tokens
+        // TODO: Alert_Event does NOT generate an error
         Category alert_Event = fac.newCategory("http://sensorml.com/ont/swe/property/AlertEvent", null, null, null);
         AllowedTokens allowedEvents = fac.newAllowedTokens();
         allowedEvents.addValue("ALERT");
@@ -82,7 +84,7 @@ public class SimCBRNOutputAlerts extends AbstractSensorOutput<SimCBRNSensor>
         allowedEvents.addValue("NONE");
         alert_Event.setConstraint(allowedEvents);
         cbrnAlertData.addComponent("event", alert_Event);
-
+        // TODO: The Alert outputs below give errors when looking for RAW format data from the SOS Service
         // Agent Classes
         Category alert_AgentClass = fac.newCategory("http://sensorml.com/ont/swe/property/ChemicalAgentClass", null, null,null );
         AllowedTokens allowedAgentClasses = fac.newAllowedTokens();

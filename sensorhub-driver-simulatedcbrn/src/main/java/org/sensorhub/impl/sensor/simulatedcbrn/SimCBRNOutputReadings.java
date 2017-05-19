@@ -64,8 +64,8 @@ public class SimCBRNOutputReadings extends AbstractSensorOutput<SimCBRNSensor>
 		// Build SWE Common record structure
 		cbrnReadingData = fac.newDataRecord(7);
 		cbrnReadingData.setName(getName());
-		cbrnReadingData.setDefinition("http://sensorml.com/ont/swe/property/ToxicAgent");
-		cbrnReadingData.setDescription("CBRN measurements");
+//		cbrnReadingData.setDefinition("http://sensorml.com/ont/swe/property/ToxicAgent");
+//		cbrnReadingData.setDescription("CBRN measurements");
 
 		// Add fields
 		cbrnReadingData.addComponent("time", fac.newTimeStampIsoUTC());

@@ -89,7 +89,7 @@ public class TestSimCBRN implements IEventListener
 		System.out.println();
 		ISensorDataInterface idOutput = driver.getObservationOutputs().get("ID");
 		ISensorDataInterface alertOutput = driver.getObservationOutputs().get("ALERTS");
-		ISensorDataInterface readingsOutput = driver.getObservationOutputs().get("READGS");
+		//ISensorDataInterface readingsOutput = driver.getObservationOutputs().get("READGS");
 		ISensorDataInterface maintOutput = driver.getObservationOutputs().get("MAINT");
 		ISensorDataInterface statusOutput = driver.getObservationOutputs().get("STATUS");
 
@@ -110,13 +110,13 @@ public class TestSimCBRN implements IEventListener
 
 		writer.setDataComponents(idOutput.getRecordDescription());
 		writer1.setDataComponents(alertOutput.getRecordDescription());
-		writer2.setDataComponents(readingsOutput.getRecordDescription());
+		//writer2.setDataComponents(readingsOutput.getRecordDescription());
 		writer3.setDataComponents(maintOutput.getRecordDescription());
 		//writer4.setDataComponents(statusOutput.getRecordDescription());
 
 		writer.setOutput(System.out);
 		writer1.setOutput(System.out);
-		writer2.setOutput(System.out);
+		//writer2.setOutput(System.out);
 		writer3.setOutput(System.out);
 		//writer4.setOutput(System.out);
 

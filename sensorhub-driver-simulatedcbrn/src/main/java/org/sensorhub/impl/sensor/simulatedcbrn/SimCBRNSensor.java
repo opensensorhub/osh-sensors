@@ -64,16 +64,17 @@ public class SimCBRNSensor extends AbstractSensorModule<SimCBRNConfig>
         addOutput(alertsDataInterface, false);
         alertsDataInterface.init();
 
-        readingsDataInterface = new SimCBRNOutputReadings(this);
-        addOutput(readingsDataInterface, false);
-        readingsDataInterface.init();
+        //TODO: add this back in after testing if the duplication causes a problem, also add back to stop and start fcn's
+//        readingsDataInterface = new SimCBRNOutputReadings(this);
+//        addOutput(readingsDataInterface, false);
+//        readingsDataInterface.init();
 
         maintDataInterface = new SimCBRNOutputMaintenance(this);
         addOutput(maintDataInterface,false);
         maintDataInterface.init();
 
         statusDataInterface = new SimCBRNOutputStatus(this);
-        addOutput(statusDataInterface,true);
+        addOutput(statusDataInterface,false);
         statusDataInterface.init();
     }
 
@@ -83,7 +84,7 @@ public class SimCBRNSensor extends AbstractSensorModule<SimCBRNConfig>
     {
         idDataInterface.start();
         alertsDataInterface.start();
-        readingsDataInterface.start();
+        //readingsDataInterface.start();
         maintDataInterface.start();
         statusDataInterface.start();
     }
@@ -94,7 +95,7 @@ public class SimCBRNSensor extends AbstractSensorModule<SimCBRNConfig>
     {
         idDataInterface.stop();
         alertsDataInterface.stop();
-        readingsDataInterface.stop();
+       // readingsDataInterface.stop();
         maintDataInterface.stop();
         statusDataInterface.stop();
     }
