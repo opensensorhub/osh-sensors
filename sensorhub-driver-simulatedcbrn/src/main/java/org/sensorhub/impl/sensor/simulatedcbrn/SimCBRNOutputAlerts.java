@@ -71,7 +71,8 @@ public class SimCBRNOutputAlerts extends AbstractSensorOutput<SimCBRNSensor>
 
         // Add fields
         cbrnAlertData.addComponent("time", fac.newTimeStampIsoUTC());
-        cbrnAlertData.addComponent("id", fac.newCategory("http://sensorml.com/ont/swe/property/SensorID",null,null,"http://sensorml.com/ont/swe/property/sensorRegistry"));
+        //cbrnAlertData.addComponent("id", fac.newCategory("http://sensorml.com/ont/swe/property/SensorIdentifier",null,null,"http://sensorml.com/ont/swe/property/sensorRegistry"));
+        cbrnAlertData.addComponent("id", fac.newCategory("http://sensorml.com/ont/swe/property/SensorID",null,null,null));
 
         // To set up the event alert, must add set of allowed tokens
         // TODO: Alert_Event does NOT generate an error

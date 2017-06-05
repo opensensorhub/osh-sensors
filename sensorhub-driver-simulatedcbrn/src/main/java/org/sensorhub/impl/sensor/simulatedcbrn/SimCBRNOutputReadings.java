@@ -35,8 +35,6 @@ public class SimCBRNOutputReadings extends AbstractSensorOutput<SimCBRNSensor>
 
 	// "Sensor" variables (what gets output as the sensor data
 	double temp = tempRef;
-	String ID = "testID";
-	//String eventStatus = "NONE";
 	String agentClassStatus = "G_Agent";
 	String agentIDStatus = "GA";
 	int levelStatus = 0;
@@ -69,7 +67,6 @@ public class SimCBRNOutputReadings extends AbstractSensorOutput<SimCBRNSensor>
 
 		// Add fields
 		cbrnReadingData.addComponent("time", fac.newTimeStampIsoUTC());
-		cbrnReadingData.addComponent("id", fac.newCategory("http://sensorml.com/ont/swe/property/SensorID",null,null,"http://sensorml.com/ont/swe/property/sensorRegistry"));
 
 		// Agent Classes
 		Category reading_AgentClass = fac.newCategory("http://sensorml.com/ont/swe/property/ChemicalAgentClass", null, null,null );
@@ -140,13 +137,12 @@ public class SimCBRNOutputReadings extends AbstractSensorOutput<SimCBRNSensor>
 		// Build DataBlock
 		DataBlock dataBlock = cbrnReadingData.createDataBlock();
 		dataBlock.setDoubleValue(0, time);
-		dataBlock.setStringValue(1, ID);
-		dataBlock.setStringValue(2, agentClassStatus);
-		dataBlock.setStringValue(3, agentIDStatus);
-		dataBlock.setIntValue(4, levelStatus);
-		dataBlock.setStringValue(5, units);
-		dataBlock.setStringValue(6, hazardLevelStatus);
-		dataBlock.setDoubleValue(7, temp);
+		dataBlock.setStringValue(1, agentClassStatus);
+		dataBlock.setStringValue(2, agentIDStatus);
+		dataBlock.setIntValue(3, levelStatus);
+		dataBlock.setStringValue(4, units);
+		dataBlock.setStringValue(5, hazardLevelStatus);
+		dataBlock.setDoubleValue(6, temp);
 
 		//this method call is required to push data
 		latestRecord = dataBlock;

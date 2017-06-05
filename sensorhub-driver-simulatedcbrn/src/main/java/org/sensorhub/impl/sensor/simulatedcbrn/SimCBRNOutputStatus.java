@@ -35,7 +35,6 @@ public class SimCBRNOutputStatus extends AbstractSensorOutput<SimCBRNSensor>
 	double tempRef = 20.0;
 
 	// "Sensor" variables (what gets output as the sensor data
-	String ID = "testID";
 	boolean bitFail = false;
 	boolean alertStatus = false;
 	boolean maintNeeded = false;
@@ -66,7 +65,6 @@ public class SimCBRNOutputStatus extends AbstractSensorOutput<SimCBRNSensor>
 
 		// Add fields
 		cbrnStatusData.addComponent("time", fac.newTimeStampIsoUTC());
-		cbrnStatusData.addComponent("id", fac.newCategory("http://sensorml.com/ont/swe/property/SensorID",null,null,"http://sensorml.com/ont/swe/property/sensorRegistry"));
 		cbrnStatusData.addComponent("bit_failure", fac.newBoolean("http://sensorml.com/ont/swe/property/BIT_Failure", null, null));
 		cbrnStatusData.addComponent("status_alert", fac.newBoolean("http://sensorml.com/ont/swe/property/Alert", null, null));
 		cbrnStatusData.addComponent("need_maintenance", fac.newBoolean("http://sensorml.com/ont/swe/property/MaintenanceNeeded", null, null) );
@@ -86,11 +84,10 @@ public class SimCBRNOutputStatus extends AbstractSensorOutput<SimCBRNSensor>
 		// Build DataBlock
 		DataBlock dataBlock = cbrnStatusData.createDataBlock();
 		dataBlock.setDoubleValue(0, time);
-		dataBlock.setStringValue(1, ID);
-		dataBlock.setBooleanValue(2, bitFail);
-		dataBlock.setBooleanValue(3, alertStatus);
-		dataBlock.setBooleanValue(4, maintNeeded);
-		dataBlock.setStringValue(5,nakStatus);
+		dataBlock.setBooleanValue(1, bitFail);
+		dataBlock.setBooleanValue(2, alertStatus);
+		dataBlock.setBooleanValue(3, maintNeeded);
+		dataBlock.setStringValue(4,nakStatus);
 
 
 		//this method call is required to push data

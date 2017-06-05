@@ -35,7 +35,6 @@ public class SimCBRNOutputID extends AbstractSensorOutput<SimCBRNSensor>
 	double tempRef = 20.0;
 
 	// "Sensor" variables (what gets output as the sensor data
-	String sensorID = "cbrntest01";
 	String hostID = "111-11-111-HID";
 	String mp_name = "User, Test";
 	String mp_org = "TestOrg";
@@ -67,7 +66,6 @@ public class SimCBRNOutputID extends AbstractSensorOutput<SimCBRNSensor>
 
 		// Add fields
 		cbrnIDData.addComponent("time", fac.newTimeStampIsoUTC());
-		cbrnIDData.addComponent("sensor_id", fac.newCategory("http://sensorml.com/ont/swe/property/SensorID",null,null,"http://sensorml.com/ont/swe/property/sensorRegistry"));
 		cbrnIDData.addComponent("host_id", fac.newCategory("http://sensorml.com/ont/swe/property/HostID", null, null, null));
 		DataRecord poc_info = fac.newDataRecord(5);
 		poc_info.setDefinition("http://sensorml.com/ont/swe/property/POC");
@@ -94,13 +92,12 @@ public class SimCBRNOutputID extends AbstractSensorOutput<SimCBRNSensor>
 		// Build DataBlock
 		DataBlock dataBlock = cbrnIDData.createDataBlock();
 		dataBlock.setDoubleValue(0, time);
-		dataBlock.setStringValue(1, sensorID);
-		dataBlock.setStringValue(2, hostID);
-		dataBlock.setStringValue(3, mp_name);
-		dataBlock.setStringValue(4, mp_org);
-		dataBlock.setStringValue(5, mp_phone);
-		dataBlock.setStringValue(6, mp_email);
-		dataBlock.setStringValue(7, mp_address);
+		dataBlock.setStringValue(1, hostID);
+		dataBlock.setStringValue(2, mp_name);
+		dataBlock.setStringValue(3, mp_org);
+		dataBlock.setStringValue(4, mp_phone);
+		dataBlock.setStringValue(5, mp_email);
+		dataBlock.setStringValue(6, mp_address);
 
 
 		//this method call is required to push data

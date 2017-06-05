@@ -35,7 +35,6 @@ public class SimCBRNOutputMaintenance extends AbstractSensorOutput<SimCBRNSensor
 
 	// "Sensor" variables (what gets output as the sensor data
 	double temp = tempRef;
-	String ID = "testID";
 	//String eventStatus = "NONE";
 	String fault = "";
 	boolean lowSieve = false;
@@ -66,7 +65,6 @@ public class SimCBRNOutputMaintenance extends AbstractSensorOutput<SimCBRNSensor
 
 		// Add fields
 		cbrnMaintData.addComponent("time", fac.newTimeStampIsoUTC());
-		cbrnMaintData.addComponent("id", fac.newCategory("http://sensorml.com/ont/swe/property/SensorID",null,null,"http://sensorml.com/ont/swe/property/sensorRegistry"));
 
 		Category maint_faults = fac.newCategory("http://sensorml.com/ont/swe/property/MaintenanceFaults", null, null, null);
 		AllowedTokens faultList = fac.newAllowedTokens();
@@ -106,10 +104,9 @@ public class SimCBRNOutputMaintenance extends AbstractSensorOutput<SimCBRNSensor
 		// Build DataBlock
 		DataBlock dataBlock = cbrnMaintData.createDataBlock();
 		dataBlock.setDoubleValue(0, time);
-		dataBlock.setStringValue(1, ID);
-		dataBlock.setStringValue(2, fault);
-		dataBlock.setBooleanValue(3, lowSieve);
-		dataBlock.setIntValue(4, usageHours);
+		dataBlock.setStringValue(1, fault);
+		dataBlock.setBooleanValue(2, lowSieve);
+		dataBlock.setIntValue(3, usageHours);
 
 
 		//this method call is required to push data
