@@ -74,8 +74,11 @@ public class CBRNSimulatedData {
 		return maxThreatAgent;
 	}
 
-
-	public void setMaxThreatAgent()
+	/**
+	 * <p>Reads all chemical agents and sets sensor to display info on only the one
+	 * with the highest threat level</p>
+	 */
+	private void setMaxThreatAgent()
 	{
 		if (g_Agent.getThreatLevel() > h_Agent.getThreatLevel() && g_Agent.getThreatLevel() > v_Agent.getThreatLevel()
 				&& g_Agent.getThreatLevel() > blood_Agent.getThreatLevel())
@@ -114,10 +117,10 @@ public class CBRNSimulatedData {
 		{
 			simTemp();
 			g_Agent.update();
-			h_Agent.update();
-			v_Agent.update();
-			blood_Agent.update();
-			setMaxThreatAgent();
+//			h_Agent.update();
+//			v_Agent.update();
+//			blood_Agent.update();
+//			setMaxThreatAgent();
 			autoSetWarnStatus();
 			lastUpdateTime = Calendar.getInstance().getTimeInMillis();
 		}
