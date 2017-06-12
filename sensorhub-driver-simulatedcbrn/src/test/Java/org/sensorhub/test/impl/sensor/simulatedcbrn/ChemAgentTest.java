@@ -1,7 +1,7 @@
 package org.sensorhub.test.impl.sensor.simulatedcbrn;
 
+import datasimulation.ChemAgent;
 import org.junit.Test;
-import org.sensorhub.impl.sensor.simulatedcbrn.*;
 
 import static org.junit.Assert.*;
 

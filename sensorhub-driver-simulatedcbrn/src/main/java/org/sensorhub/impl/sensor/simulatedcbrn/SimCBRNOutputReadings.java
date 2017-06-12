@@ -14,6 +14,7 @@
  ******************************* END LICENSE BLOCK ***************************/
 package org.sensorhub.impl.sensor.simulatedcbrn;
 
+import datasimulation.CBRNSimulatedData;
 import net.opengis.swe.v20.*;
 import org.sensorhub.api.sensor.SensorDataEvent;
 import org.sensorhub.impl.sensor.AbstractSensorOutput;

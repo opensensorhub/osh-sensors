@@ -1,4 +1,4 @@
-package org.sensorhub.impl.sensor.simulatedcbrn;
+package datasimulation;
 
 
 import java.util.Random;
@@ -6,6 +6,8 @@ import java.util.Random;
 /**
  * Created by Ian Patterson on 5/9/2017.
  */
+
+//TODO: move all threat level detection into the CBRN simulated data class
 public class ChemAgent
 {
 	private Random rand = new Random();

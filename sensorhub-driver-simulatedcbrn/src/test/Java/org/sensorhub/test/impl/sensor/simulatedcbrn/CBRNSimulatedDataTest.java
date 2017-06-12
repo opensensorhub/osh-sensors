@@ -1,7 +1,7 @@
 package org.sensorhub.test.impl.sensor.simulatedcbrn;
 
 import org.junit.Test;
-import org.sensorhub.impl.sensor.simulatedcbrn.CBRNSimulatedData;
+import datasimulation.CBRNSimulatedData;
 
 import java.util.concurrent.TimeUnit;
 

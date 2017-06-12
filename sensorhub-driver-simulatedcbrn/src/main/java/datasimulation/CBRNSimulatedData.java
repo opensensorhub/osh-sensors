@@ -1,4 +1,4 @@
-package org.sensorhub.impl.sensor.simulatedcbrn;
+package datasimulation;
 
 import java.util.Calendar;
 import java.util.Random;
@@ -18,10 +18,7 @@ public class CBRNSimulatedData {
 
 	// Reference Variables
 	double tempRef = 20.0;
-	double sim_GAgentLevel = 0;
-	double sim_HAgentLevel = 0;
-	double sim_VAgentLevel = 0;
-	double sim_BloodAgentLevel = 0;
+
 	// "Actual" Sim Variables to be fed as sensor data
 	double temp = tempRef;
 	ChemAgent g_Agent;
@@ -117,10 +114,6 @@ public class CBRNSimulatedData {
 		{
 			simTemp();
 			g_Agent.update();
-//			h_Agent.update();
-//			v_Agent.update();
-//			blood_Agent.update();
-//			setMaxThreatAgent();
 			autoSetWarnStatus();
 			lastUpdateTime = Calendar.getInstance().getTimeInMillis();
 		}
@@ -182,6 +175,12 @@ public class CBRNSimulatedData {
 	private double variation(double val, double ref, double dampingCoef, double noiseSigma)
 	{
 		return -dampingCoef*(val - ref) + noiseSigma*rand.nextGaussian();
+	}
+
+	private double getObservedIntensity(double lat, double lon, PointSource source)
+	{
+
+		return lat;
 	}
 
 }
