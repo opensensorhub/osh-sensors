@@ -15,6 +15,7 @@ import org.vast.swe.helper.GeoPosHelper;
 import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +53,12 @@ public class GPSsim
 	public boolean walkingMode = false;
 
 
-	private boolean generateRandomTrajectory()
+	public GPSsim()
+	{
+		trajPoints = new ArrayList<double[]>();
+	}
+
+	public boolean generateRandomTrajectory()
 	{
 		// used fixed start/end coordinates or generate random ones 
 		double startLat;
@@ -168,18 +174,18 @@ public class GPSsim
 	}
 
 
-	private void sendMeasurement()
+	public double[] sendMeasurement()
 	{
 		if (trajPoints.isEmpty() || currentTrackPos >= trajPoints.size()-2)
 		{
 			if (!generateRandomTrajectory())
-				return;
+				return null;
 
 			// skip if generated traj is too small
 			if (trajPoints.size() < 2)
 			{
 				trajPoints.clear();
-				return;
+				return null;
 			}
 			//for (double[] p: trajPoints)
 			//     System.out.println(Arrays.toString(p));
@@ -214,6 +220,7 @@ public class GPSsim
 		eventHandler.publishEvent(new SensorDataEvent(latestRecordTime, FakeGpsOutput.this, dataBlock));*/
 
 		currentTrackPos += speed / dist;
+		return new double[] {lat, lon, alt};
 	}
 }
 

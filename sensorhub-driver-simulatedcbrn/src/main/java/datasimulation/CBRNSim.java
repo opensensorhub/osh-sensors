@@ -14,7 +14,7 @@ public class CBRNSim
 		// calculate observed intensity
 	}
 
-	private void simulteGPSMovement()
+	private void simulateGPSMovement()
 	{
 
 	}
