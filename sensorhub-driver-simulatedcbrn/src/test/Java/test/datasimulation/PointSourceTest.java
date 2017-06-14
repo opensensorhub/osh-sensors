@@ -9,7 +9,9 @@ import static org.junit.Assert.*;
  */
 public class PointSourceTest {
 	@Test
-	public void findObservedIntensity() throws Exception {
+	public void findObservedIntensity() throws Exception
+	{
+
 	}
 
 }

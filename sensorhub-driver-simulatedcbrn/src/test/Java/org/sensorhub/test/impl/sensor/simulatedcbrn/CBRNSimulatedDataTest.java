@@ -28,7 +28,7 @@ public class CBRNSimulatedDataTest {
 	@Test
 	public void getMaxThreatAgent() throws Exception
 	{
-		assertNotNull(CBRNSimulatedData.getInstance().getMaxThreatAgent());
+		assertNotNull(CBRNSimulatedData.getInstance().getDetectedAgent());
 	}
 
 	@Test
@@ -38,30 +38,30 @@ public class CBRNSimulatedDataTest {
 	@Test
 	public void update() throws Exception
 	{
-		double benchmark = CBRNSimulatedData.getInstance().getMaxThreatAgent().getThreatLevel();
+		double benchmark = CBRNSimulatedData.getInstance().getDetectedAgent().getThreatLevel();
 		TimeUnit.SECONDS.sleep(1);
 		CBRNSimulatedData.getInstance().update();
-		assertNotEquals(benchmark, CBRNSimulatedData.getInstance().getMaxThreatAgent().getThreatLevel());
+		assertNotEquals(benchmark, CBRNSimulatedData.getInstance().getDetectedAgent().getThreatLevel());
 	}
 
 	@Test
 	public void getWarnStatus() throws Exception
 	{
-		CBRNSimulatedData.getInstance().getMaxThreatAgent().setThreatLevel(0.0);
+		CBRNSimulatedData.getInstance().getDetectedAgent().setThreatLevel(0.0);
 		CBRNSimulatedData.getInstance().autoSetWarnStatus();
 		System.out.println(CBRNSimulatedData.getInstance().getWarnStatus());
 		for(int i = 0; i< 100; i++)
 		{
-			CBRNSimulatedData.getInstance().getMaxThreatAgent().setThreatLevel(
-					CBRNSimulatedData.getInstance().getMaxThreatAgent().getThreatLevel() + 0.1);
+			CBRNSimulatedData.getInstance().getDetectedAgent().setThreatLevel(
+					CBRNSimulatedData.getInstance().getDetectedAgent().getThreatLevel() + 0.1);
 			CBRNSimulatedData.getInstance().autoSetWarnStatus();
 			System.out.println(CBRNSimulatedData.getInstance().getWarnStatus());
 		}
 
 		for(int i = 0; i< 100; i++)
 		{
-			CBRNSimulatedData.getInstance().getMaxThreatAgent().setThreatLevel(
-					CBRNSimulatedData.getInstance().getMaxThreatAgent().getThreatLevel() - 0.1);
+			CBRNSimulatedData.getInstance().getDetectedAgent().setThreatLevel(
+					CBRNSimulatedData.getInstance().getDetectedAgent().getThreatLevel() - 0.1);
 			CBRNSimulatedData.getInstance().autoSetWarnStatus();
 			System.out.println(CBRNSimulatedData.getInstance().getWarnStatus());
 		}

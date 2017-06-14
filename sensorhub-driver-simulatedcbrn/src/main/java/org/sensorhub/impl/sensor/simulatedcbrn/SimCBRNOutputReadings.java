@@ -130,10 +130,10 @@ public class SimCBRNOutputReadings extends AbstractSensorOutput<SimCBRNSensor>
 
 		// Temperature sim (copied from FakeWeatherOutput)
 		temp += variation(temp, tempRef, 0.001, 0.1);
-		agentClassStatus = CBRNSimulatedData.getInstance().getMaxThreatAgent().getAgentClass();
-		agentIDStatus = CBRNSimulatedData.getInstance().getMaxThreatAgent().getAgentID();
-		levelStatus = CBRNSimulatedData.getInstance().getMaxThreatAgent().getBars();
-		hazardLevelStatus = CBRNSimulatedData.getInstance().getMaxThreatAgent().getThreat();
+		agentClassStatus = CBRNSimulatedData.getInstance().getDetectedAgent().getAgentClass();
+		agentIDStatus = CBRNSimulatedData.getInstance().getDetectedAgent().getAgentID();
+		levelStatus = CBRNSimulatedData.getInstance().getDetectedAgent().getBars();
+		hazardLevelStatus = CBRNSimulatedData.getInstance().getDetectedAgent().getThreat();
 
 		// Build DataBlock
 		DataBlock dataBlock = cbrnReadingData.createDataBlock();

@@ -31,26 +31,26 @@ public class GPSsim
 {
 	DataComponent posDataStruct;
 	DataEncoding posDataEncoding;
-	List<double[]> trajPoints;
-	boolean sendData;
-	Timer timer;
-	double currentTrackPos;
+	static List<double[]> trajPoints;
+	static boolean sendData;
+	static Timer timer;
+	static double currentTrackPos;
 
-	public String googleApiUrl = "http://maps.googleapis.com/maps/api/directions/json";
+	private static String googleApiUrl = "http://maps.googleapis.com/maps/api/directions/json";
 
 	// use these to add specific start and stop locations
-	public Double startLatitude = null;  // in degrees
-	public Double startLongitude = null;  // in degrees
-	public Double stopLatitude = null;  // in degrees
-	public Double stopLongitude = null;  // in degrees
+	private static Double startLatitude = null;  // in degrees
+	private static Double startLongitude = null;  // in degrees
+	private static Double stopLatitude = null;  // in degrees
+	private static Double stopLongitude = null;  // in degrees
 
 	// otherwise use these to generate random start and stop locations
-	public double centerLatitude = 34.7300; // in deg    
-	public double centerLongitude = -86.5850; // in deg
-	public double areaSize = 0.1; // in deg
+	private static double centerLatitude = 34.7300; // in deg
+	private static double centerLongitude = -86.5850; // in deg
+	private static double areaSize = 0.1; // in deg
 
-	public double vehicleSpeed = 40; // km/h
-	public boolean walkingMode = false;
+	private static double vehicleSpeed = 40; // km/h
+	private static boolean walkingMode = false;
 
 
 	public GPSsim()
@@ -58,7 +58,7 @@ public class GPSsim
 		trajPoints = new ArrayList<double[]>();
 	}
 
-	public boolean generateRandomTrajectory()
+	public static boolean generateRandomTrajectory()
 	{
 		// used fixed start/end coordinates or generate random ones 
 		double startLat;
@@ -137,7 +137,7 @@ public class GPSsim
 	}
 
 
-	private void decodePoly(String encoded)
+	private static void decodePoly(String encoded)
 	{
 		int index = 0, len = encoded.length();
 		int lat = 0, lng = 0;
@@ -174,7 +174,7 @@ public class GPSsim
 	}
 
 
-	public double[] sendMeasurement()
+	public static double[] sendMeasurement()
 	{
 		if (trajPoints.isEmpty() || currentTrackPos >= trajPoints.size()-2)
 		{

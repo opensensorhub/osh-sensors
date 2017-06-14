@@ -1,5 +1,8 @@
 package datasimulation;
 
+import org.sensorhub.impl.sensor.simulatedcbrn.SimCBRNConfig;
+
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Random;
 import java.util.Timer;
@@ -11,41 +14,34 @@ import java.util.Timer;
 // Todo: Apply inverse-square law to toxin severity (Intensity at point = (Severity at source)/(4*pi*r^2)) r = dist from chem source
 public class CBRNSimulatedData {
 
-	private static CBRNSimulatedData ourInstance;
 	Timer timer;
 	long lastUpdateTime;
 	Random rand = new Random();
+	SimCBRNConfig config;
 
 	// Reference Variables
 	double tempRef = 20.0;
 
 	// "Actual" Sim Variables to be fed as sensor data
+	double[] sensorLoc;
+	ArrayList<PointSource> sources;
 	double temp = tempRef;
-	ChemAgent g_Agent;
-	ChemAgent h_Agent;
-	ChemAgent v_Agent;
-	ChemAgent blood_Agent;
-	ChemAgent maxThreatAgent = null;
+	ChemAgent detectedAgent = null;
 	double preWarnStatus = 0;
 	String warnStatus = "NONE";
+	double threatLevel;
+	double min_threat = 0;
+	double max_threat =600;
 
-	public static CBRNSimulatedData getInstance()
-	{
-		if(ourInstance == null)
-		{
-			ourInstance = new CBRNSimulatedData();
-		}
-		return ourInstance;
-	}
 
-	private CBRNSimulatedData()
+
+	public CBRNSimulatedData(SimCBRNConfig config)
 	{
-		g_Agent = new ChemAgent("GA");
-		h_Agent = new ChemAgent("HN");
-		v_Agent = new ChemAgent("VX");
-		blood_Agent = new ChemAgent("AC");
+		this.config = config;
+		sensorLoc = new double[]{0,0,0};
+		threatLevel = 0;
 		lastUpdateTime = Calendar.getInstance().getTimeInMillis();
-		maxThreatAgent = g_Agent;
+		detectedAgent = null;
 		update();
 		autoSetWarnStatus();
 	}
@@ -65,43 +61,11 @@ public class CBRNSimulatedData {
 	}
 
 
-	public ChemAgent getMaxThreatAgent()
-
+	public ChemAgent getDetectedAgent()
 	{
-		return maxThreatAgent;
+		return detectedAgent;
 	}
 
-	/**
-	 * <p>Reads all chemical agents and sets sensor to display info on only the one
-	 * with the highest threat level</p>
-	 */
-	private void setMaxThreatAgent()
-	{
-		if (g_Agent.getThreatLevel() > h_Agent.getThreatLevel() && g_Agent.getThreatLevel() > v_Agent.getThreatLevel()
-				&& g_Agent.getThreatLevel() > blood_Agent.getThreatLevel())
-		{
-			maxThreatAgent = g_Agent;
-		}
-		else if (h_Agent.getThreatLevel() > g_Agent.getThreatLevel() && h_Agent.getThreatLevel() > v_Agent.getThreatLevel()
-				&& h_Agent.getThreatLevel() > blood_Agent.getThreatLevel())
-		{
-			maxThreatAgent = h_Agent;
-		}
-		else if(v_Agent.getThreatLevel() > g_Agent.getThreatLevel() && v_Agent.getThreatLevel() > h_Agent.getThreatLevel()
-				&& v_Agent.getThreatLevel() > blood_Agent.getThreatLevel())
-		{
-			maxThreatAgent = v_Agent;
-		}
-		else if(blood_Agent.getThreatLevel() > g_Agent.getThreatLevel() && blood_Agent.getThreatLevel() > h_Agent.getThreatLevel()
-				&& blood_Agent.getThreatLevel() > v_Agent.getThreatLevel())
-		{
-			maxThreatAgent = blood_Agent;
-		}
-		else
-		{
-			maxThreatAgent = g_Agent;
-		}
-	}
 
 	/**
 	 * <p>To run through the variables and make all adjustments
@@ -113,41 +77,55 @@ public class CBRNSimulatedData {
 		if(Calendar.getInstance().getTimeInMillis() - lastUpdateTime >= 1000)
 		{
 			simTemp();
-			g_Agent.update();
+			simulate(config);
 			autoSetWarnStatus();
 			lastUpdateTime = Calendar.getInstance().getTimeInMillis();
 		}
 	}
 
+	private void simulate(SimCBRNConfig config)
+	{
+		// Update the sensor's location
+		GPSsim.generateRandomTrajectory();
+		sensorLoc = GPSsim.sendMeasurement();
+		config.location.lat = sensorLoc[0];
+		config.location.lon = sensorLoc[1];
+		config.location.alt = sensorLoc[2];
+
+		// Get the intensity of the detected source
+		threatLevel = getObservedIntensity();
+		detectedAgent = sources.get(0).getAgent();
+	}
+
 
 	public void autoSetWarnStatus()
 	{
-		if(maxThreatAgent.getThreatLevel() - preWarnStatus > 0.0 && maxThreatAgent.getThreatLevel() > 0.0
-				&& maxThreatAgent.getThreatLevel() < 6.67)
+		if(detectedAgent.getThreatLevel() - preWarnStatus > 0.0 && detectedAgent.getThreatLevel() > 0.0
+				&& detectedAgent.getThreatLevel() < 300)
 		{
 			warnStatus = "WARN";
 		}
 
-		else if(maxThreatAgent.getThreatLevel() - preWarnStatus > 0.0 && maxThreatAgent.getThreatLevel() >= 6.67)
+		else if(detectedAgent.getThreatLevel() - preWarnStatus > 0.0 && detectedAgent.getThreatLevel() >= 300)
 		{
 			warnStatus = "ALERT";
 		}
-		else if(maxThreatAgent.getThreatLevel() - preWarnStatus < 0.0 && maxThreatAgent.getThreatLevel() < 6.67
+		else if(detectedAgent.getThreatLevel() - preWarnStatus < 0.0 && detectedAgent.getThreatLevel() < 300
 				&& warnStatus.equals("ALERT"))
 		{
 			warnStatus = "DEALERT";
 		}
-		else if(maxThreatAgent.getThreatLevel() - preWarnStatus < 0.0 && maxThreatAgent.getThreatLevel() == 0.0
+		else if(detectedAgent.getThreatLevel() - preWarnStatus < 0.0 && detectedAgent.getThreatLevel() == 0.0
 				&& warnStatus.equals("WARN"))
 		{
 			warnStatus = "DEWARN";
 		}
-		else if(warnStatus.equals("DEALERT") && maxThreatAgent.getThreatLevel() > 0.0
-				&& maxThreatAgent.getThreatLevel() < 6.67)
+		else if(warnStatus.equals("DEALERT") && detectedAgent.getThreatLevel() > 0.0
+				&& detectedAgent.getThreatLevel() < 300)
 		{
 			warnStatus = "WARN";
 		}
-		else if(warnStatus.equals("DEWARN") && maxThreatAgent.getThreatLevel() == 0.0)
+		else if(warnStatus.equals("DEWARN") && detectedAgent.getThreatLevel() == 0.0)
 		{
 			warnStatus = "NONE";
 		}
@@ -156,7 +134,7 @@ public class CBRNSimulatedData {
 			warnStatus = warnStatus;
 		}
 
-		preWarnStatus = getMaxThreatAgent().getThreatLevel();
+		preWarnStatus = getDetectedAgent().getThreatLevel();
 	}
 
 
@@ -177,10 +155,52 @@ public class CBRNSimulatedData {
 		return -dampingCoef*(val - ref) + noiseSigma*rand.nextGaussian();
 	}
 
-	private double getObservedIntensity(double lat, double lon, PointSource source)
+	private double getObservedIntensity()
 	{
-
-		return lat;
+		double avgIntensity = 0;
+		for (PointSource source1 : sources)
+		{
+			avgIntensity += source1.findObservedIntensity(sensorLoc[0], sensorLoc[1], sensorLoc[2]);
+		}
+		return avgIntensity/sources.size();
 	}
 
+	public void addPointSource(double lat, double lon, double alt, double intensity, String agent_type)
+	{
+		sources.add(new PointSource(lat, lon, alt, intensity, agent_type));
+	}
+
+
+	public int findThreatLevel()
+	{
+		if(threatLevel == 0) return 0;
+		else if (threatLevel > 0.00 && threatLevel <= 100) return 1;
+		else if (threatLevel > 100 && threatLevel <= 200) return 2;
+		else if (threatLevel > 200 && threatLevel <= 300) return 3;
+		else if (threatLevel > 300 && threatLevel <= 400) return 4;
+		else if (threatLevel > 400 && threatLevel <= 500) return 5;
+		else if (threatLevel > 500) return 6;
+		else return -1;
+	}
+
+	// TODO: add in low therat level here and as an allowable token
+	public String findThreatString()
+	{
+		if(threatLevel == min_threat)
+		{
+			return "NONE";
+		}
+		else if(threatLevel > min_threat && threatLevel <= max_threat/2)
+		{
+			return "MEDIUM";
+		}
+		else if(threatLevel > max_threat/2)
+		{
+			return "HIGH";
+		}
+		else
+		{
+			return null;
+		}
+	}
 }

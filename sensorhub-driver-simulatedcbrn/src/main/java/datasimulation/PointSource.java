@@ -13,15 +13,15 @@ public class PointSource
 	private double intensity;
 	private ChemAgent agent;
 
-	public PointSource(double lat, double lon, double alt, double intensity) {
+	public PointSource(double lat, double lon, double alt, double intensity, String agent_type) {
 		this.lat = lat;
 		this.lon = lon;
 		this.alt = alt;
 		this.intensity = intensity;
+		this.agent = new ChemAgent(agent_type);
 	}
 
 	public double getLat() {
-
 		return lat;
 	}
 
@@ -38,7 +38,6 @@ public class PointSource
 	}
 
 	public void setLat(double lat) {
-
 		this.lat = lat;
 	}
 
@@ -52,6 +51,14 @@ public class PointSource
 
 	public void setIntensity(double intensity) {
 		this.intensity = intensity;
+	}
+
+	public ChemAgent getAgent() {
+		return agent;
+	}
+
+	public void setAgent(ChemAgent agent) {
+		this.agent = agent;
 	}
 
 	public double findObservedIntensity(double b_lat, double b_lon, double b_alt)
