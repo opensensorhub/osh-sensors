@@ -38,9 +38,9 @@ public class SimCBRNOutputReadings extends AbstractSensorOutput<SimCBRNSensor>
 	double temp = tempRef;
 	String agentClassStatus = "G_Agent";
 	String agentIDStatus = "GA";
-	int levelStatus = 0;
+	int numericalLevel = 0;
 	String units = "BARS";
-	String hazardLevelStatus = "NONE";
+	String stringLevel = "NONE";
 
 
 	public SimCBRNOutputReadings(SimCBRNSensor parentSensor)
@@ -125,24 +125,24 @@ public class SimCBRNOutputReadings extends AbstractSensorOutput<SimCBRNSensor>
 	// will need to do some of the simulation here save for later
 	private void sendMeasurement()
 	{
-		CBRNSimulatedData.getInstance().update();
+		getParentModule().simData.update();
 		double time = System.currentTimeMillis()/1000;
 
 		// Temperature sim (copied from FakeWeatherOutput)
 		temp += variation(temp, tempRef, 0.001, 0.1);
-		agentClassStatus = CBRNSimulatedData.getInstance().getDetectedAgent().getAgentClass();
-		agentIDStatus = CBRNSimulatedData.getInstance().getDetectedAgent().getAgentID();
-		levelStatus = CBRNSimulatedData.getInstance().getDetectedAgent().getBars();
-		hazardLevelStatus = CBRNSimulatedData.getInstance().getDetectedAgent().getThreat();
+		agentClassStatus = getParentModule().simData.getDetectedAgent().getAgentClass();
+		agentIDStatus = getParentModule().simData.getDetectedAgent().getAgentID();
+		numericalLevel = getParentModule().simData.findThreatLevel();
+		stringLevel = getParentModule().simData.findThreatString();
 
 		// Build DataBlock
 		DataBlock dataBlock = cbrnReadingData.createDataBlock();
 		dataBlock.setDoubleValue(0, time);
 		dataBlock.setStringValue(1, agentClassStatus);
 		dataBlock.setStringValue(2, agentIDStatus);
-		dataBlock.setIntValue(3, levelStatus);
+		dataBlock.setIntValue(3, numericalLevel);
 		dataBlock.setStringValue(4, units);
-		dataBlock.setStringValue(5, hazardLevelStatus);
+		dataBlock.setStringValue(5, stringLevel);
 		dataBlock.setDoubleValue(6, temp);
 
 		//this method call is required to push data

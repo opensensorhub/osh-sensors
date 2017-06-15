@@ -11,7 +11,6 @@ import java.util.Timer;
  * Created by Ian Patterson on 5/4/2017.
  */
 
-// Todo: Apply inverse-square law to toxin severity (Intensity at point = (Severity at source)/(4*pi*r^2)) r = dist from chem source
 public class CBRNSimulatedData {
 
 	Timer timer;
