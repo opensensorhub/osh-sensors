@@ -15,8 +15,8 @@ public class GPSsimTest
 	{
 		GPSsim test = new GPSsim();
 		double[] locTest_1;
-		test.generateRandomTrajectory();
-		locTest_1 = test.sendMeasurement();
+		GPSsim.generateRandomTrajectory();
+		locTest_1 = GPSsim.sendMeasurement();
 		System.out.println(locTest_1[0]);
 	}
 }

@@ -15,6 +15,7 @@
 
 package org.sensorhub.impl.sensor.simulatedcbrn;
 
+import datasimulation.PointSource;
 import org.sensorhub.api.config.DisplayInfo;
 import org.sensorhub.api.config.DisplayInfo.Required;
 import org.sensorhub.api.sensor.PositionConfig.LLALocation;
@@ -31,6 +32,9 @@ public class SimCBRNConfig extends SensorConfig
 
     @DisplayInfo(desc = "Sensor Location")
     public LLALocation location = new LLALocation();
+
+    @DisplayInfo(desc = "Point Source 1")
+    public PointSource source1 = new PointSource(34.8308, -86.7228, 0, 600, "VX");
 
 
     public SimCBRNConfig()

@@ -16,14 +16,14 @@ public class CBRNSimulatedData {
 	Timer timer;
 	long lastUpdateTime;
 	Random rand = new Random();
-	SimCBRNConfig config;
+	//SimCBRNConfig config;
 
 	// Reference Variables
 	double tempRef = 20.0;
 
 	// "Actual" Sim Variables to be fed as sensor data
 	double[] sensorLoc;
-	ArrayList<PointSource> sources;
+	PointSource[] sources;
 	double temp = tempRef;
 	ChemAgent detectedAgent = null;
 	double preWarnStatus = 0;
@@ -34,14 +34,16 @@ public class CBRNSimulatedData {
 
 
 
-	public CBRNSimulatedData(SimCBRNConfig config)
+	public CBRNSimulatedData()
 	{
-		this.config = config;
+		//this.config = config;
 		sensorLoc = new double[]{0,0,0};
 		threatLevel = 0;
 		lastUpdateTime = Calendar.getInstance().getTimeInMillis();
+		sources = new PointSource[1];
+		//sources[0] = config.source1;
 		detectedAgent = null;
-		update();
+		//update();
 		autoSetWarnStatus();
 	}
 
@@ -71,7 +73,7 @@ public class CBRNSimulatedData {
 	 * recommend calling this every time the sensor makes a call
 	 * to its outputs</p>
 	 */
-	public void update()
+	public void update(SimCBRNConfig config)
 	{
 		if(Calendar.getInstance().getTimeInMillis() - lastUpdateTime >= 1000)
 		{
@@ -93,38 +95,38 @@ public class CBRNSimulatedData {
 
 		// Get the intensity of the detected source
 		threatLevel = getObservedIntensity();
-		detectedAgent = sources.get(0).getAgent();
+		detectedAgent = sources[0].getAgent();
 	}
 
 
 	public void autoSetWarnStatus()
 	{
-		if(detectedAgent.getThreatLevel() - preWarnStatus > 0.0 && detectedAgent.getThreatLevel() > 0.0
-				&& detectedAgent.getThreatLevel() < 300)
+		if (findThreatLevel() - preWarnStatus > 0.0 && findThreatLevel() > 0.0
+				&& findThreatLevel() < 300)
 		{
 			warnStatus = "WARN";
 		}
 
-		else if(detectedAgent.getThreatLevel() - preWarnStatus > 0.0 && detectedAgent.getThreatLevel() >= 300)
+		else if (findThreatLevel() - preWarnStatus > 0.0 && findThreatLevel() >= 300)
 		{
 			warnStatus = "ALERT";
 		}
-		else if(detectedAgent.getThreatLevel() - preWarnStatus < 0.0 && detectedAgent.getThreatLevel() < 300
+		else if (findThreatLevel() - preWarnStatus < 0.0 && findThreatLevel() < 300
 				&& warnStatus.equals("ALERT"))
 		{
 			warnStatus = "DEALERT";
 		}
-		else if(detectedAgent.getThreatLevel() - preWarnStatus < 0.0 && detectedAgent.getThreatLevel() == 0.0
+		else if (findThreatLevel() - preWarnStatus < 0.0 && findThreatLevel() == 0.0
 				&& warnStatus.equals("WARN"))
 		{
 			warnStatus = "DEWARN";
 		}
-		else if(warnStatus.equals("DEALERT") && detectedAgent.getThreatLevel() > 0.0
-				&& detectedAgent.getThreatLevel() < 300)
+		else if(warnStatus.equals("DEALERT") && findThreatLevel() > 0.0
+				&& findThreatLevel() < 300)
 		{
 			warnStatus = "WARN";
 		}
-		else if(warnStatus.equals("DEWARN") && detectedAgent.getThreatLevel() == 0.0)
+		else if(warnStatus.equals("DEWARN") && findThreatLevel() == 0.0)
 		{
 			warnStatus = "NONE";
 		}
@@ -133,7 +135,7 @@ public class CBRNSimulatedData {
 			warnStatus = warnStatus;
 		}
 
-		preWarnStatus = getDetectedAgent().getThreatLevel();
+		preWarnStatus = findThreatLevel();
 	}
 
 
@@ -161,12 +163,17 @@ public class CBRNSimulatedData {
 		{
 			avgIntensity += source1.findObservedIntensity(sensorLoc[0], sensorLoc[1], sensorLoc[2]);
 		}
-		return avgIntensity/sources.size();
+		return avgIntensity/sources.length;
 	}
 
-	public void addPointSource(double lat, double lon, double alt, double intensity, String agent_type)
+	/*public void addPointSource(double lat, double lon, double alt, double intensity, String agent_type)
 	{
 		sources.add(new PointSource(lat, lon, alt, intensity, agent_type));
+	}*/
+
+	public void addSources(PointSource[] sources)
+	{
+		this.sources = sources;
 	}
 
 

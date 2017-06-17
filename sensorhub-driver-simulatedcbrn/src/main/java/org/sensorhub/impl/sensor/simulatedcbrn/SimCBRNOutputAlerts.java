@@ -140,7 +140,7 @@ public class SimCBRNOutputAlerts extends AbstractSensorOutput<SimCBRNSensor>
     private void sendMeasurement()
     {
         double time = System.currentTimeMillis()/1000;
-        getParentModule().simData.update();
+        getParentModule().simData.update(getParentModule().getConfiguration());
 
         // Temperature sim (copied from FakeWeatherOutput)
         temp += variation(temp, tempRef, 0.001, 0.1);

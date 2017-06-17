@@ -125,7 +125,7 @@ public class SimCBRNOutputReadings extends AbstractSensorOutput<SimCBRNSensor>
 	// will need to do some of the simulation here save for later
 	private void sendMeasurement()
 	{
-		getParentModule().simData.update();
+		getParentModule().simData.update(getParentModule().getConfiguration());
 		double time = System.currentTimeMillis()/1000;
 
 		// Temperature sim (copied from FakeWeatherOutput)
