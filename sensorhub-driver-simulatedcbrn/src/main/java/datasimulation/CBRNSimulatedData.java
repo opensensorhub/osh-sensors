@@ -16,7 +16,7 @@ public class CBRNSimulatedData {
 	Timer timer;
 	long lastUpdateTime;
 	Random rand = new Random();
-	//SimCBRNConfig config;
+	SimCBRNConfig config;
 
 	// Reference Variables
 	double tempRef = 20.0;
@@ -34,14 +34,14 @@ public class CBRNSimulatedData {
 
 
 
-	public CBRNSimulatedData()
+	public CBRNSimulatedData(SimCBRNConfig config)
 	{
-		//this.config = config;
+		this.config = config;
 		sensorLoc = new double[]{0,0,0};
 		threatLevel = 0;
 		lastUpdateTime = Calendar.getInstance().getTimeInMillis();
 		sources = new PointSource[1];
-		//sources[0] = config.source1;
+		sources[0] = config.source1;
 		detectedAgent = null;
 		//update();
 		autoSetWarnStatus();
@@ -96,6 +96,7 @@ public class CBRNSimulatedData {
 		// Get the intensity of the detected source
 		threatLevel = getObservedIntensity();
 		detectedAgent = sources[0].getAgent();
+		//detectedAgent = config.source1.getAgent();
 	}
 
 
