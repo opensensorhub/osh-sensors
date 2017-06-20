@@ -31,12 +31,14 @@ public class CBRNSimulatedData {
 	double threatLevel;
 	double min_threat = 0;
 	double max_threat =600;
+	double lat;
+	double lon;
+	double alt;
 
 
 
-	public CBRNSimulatedData(SimCBRNConfig config)
+	public CBRNSimulatedData)
 	{
-		this.config = config;
 		sensorLoc = new double[]{0,0,0};
 		threatLevel = 0;
 		lastUpdateTime = Calendar.getInstance().getTimeInMillis();
@@ -47,6 +49,29 @@ public class CBRNSimulatedData {
 		autoSetWarnStatus();
 	}
 
+	public double getLat() {
+		return lat;
+	}
+
+	public void setLat(double lat) {
+		this.lat = lat;
+	}
+
+	public double getLon() {
+		return lon;
+	}
+
+	public void setLon(double lon) {
+		this.lon = lon;
+	}
+
+	public double getAlt() {
+		return alt;
+	}
+
+	public void setAlt(double alt) {
+		this.alt = alt;
+	}
 
 	//need to create several forms of data randomization to supply the sensor with sim data
 	public double simTemp()
@@ -190,7 +215,7 @@ public class CBRNSimulatedData {
 		else return -1;
 	}
 
-	// TODO: add in low therat level here and as an allowable token
+	// TODO: add in low threat level here and as an allowable token
 	public String findThreatString()
 	{
 		if(threatLevel == min_threat)

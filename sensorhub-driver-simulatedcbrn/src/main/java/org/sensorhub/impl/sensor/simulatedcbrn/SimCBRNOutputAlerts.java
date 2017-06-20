@@ -14,9 +14,21 @@
  ******************************* END LICENSE BLOCK ***************************/
 package org.sensorhub.impl.sensor.simulatedcbrn;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
+import datasimulation.ChemAgent;
+import datasimulation.GPSsim;
+import datasimulation.PointSource;
 import net.opengis.swe.v20.*;
 import org.sensorhub.impl.sensor.AbstractSensorOutput;
 import org.sensorhub.api.sensor.SensorDataEvent;
+
+import java.io.BufferedInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.util.List;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -42,6 +54,18 @@ public class SimCBRNOutputAlerts extends AbstractSensorOutput<SimCBRNSensor>
     int numericalLevel = 0;
     String units = "BARS";
     String stringLevel = "NONE";
+
+    // For GPS simulation
+    List<double[]> trajPoints;
+    static double currentTrackPos;
+
+    // For Intensity calculations
+    double preWarnStatus = 0;
+    String warnStatus = "NONE";
+    double threatLevel;
+    double min_threat = 0.0;
+    double max_threat = 600.0;
+    ChemAgent detectedAgent;
 
     public SimCBRNOutputAlerts(SimCBRNSensor parentSensor)
     {
@@ -140,15 +164,15 @@ public class SimCBRNOutputAlerts extends AbstractSensorOutput<SimCBRNSensor>
     private void sendMeasurement()
     {
         double time = System.currentTimeMillis()/1000;
-        getParentModule().simData.update(getParentModule().getConfiguration());
+
 
         // Temperature sim (copied from FakeWeatherOutput)
         temp += variation(temp, tempRef, 0.001, 0.1);
-        eventStatus = getParentModule().simData.getWarnStatus();
-        agentClassStatus = getParentModule().simData.getDetectedAgent().getAgentClass();
-        agentIDStatus = getParentModule().simData.getDetectedAgent().getAgentID();
-        numericalLevel = getParentModule().simData.findThreatLevel();
-        stringLevel = getParentModule().simData.findThreatString();
+        eventStatus = warnStatus;
+        agentClassStatus =
+        agentIDStatus =
+        numericalLevel =
+        stringLevel =
 
         // Build DataBlock
         DataBlock dataBlock = cbrnAlertData.createDataBlock();
@@ -223,6 +247,226 @@ public class SimCBRNOutputAlerts extends AbstractSensorOutput<SimCBRNSensor>
     public DataEncoding getRecommendedEncoding()
     {
         return cbrnEncoding;
+    }
+
+
+    private void simulate()
+    {
+        SimCBRNConfig config = getParentModule().getConfiguration();
+        // Update the sensor's location
+        generateRandomTrajectory();
+
+        // Get the intensity of the detected source
+        threatLevel = getObservedIntensity();
+        detectedAgent = sources[0].getAgent();
+        //detectedAgent = config.source1.getAgent();
+    }
+
+
+    private boolean generateRandomTrajectory()
+    {
+        SimCBRNConfig config = getParentModule().getConfiguration();
+        // used fixed start/end coordinates or generate random ones
+        double startLat;
+        double startLong;
+        double endLat;
+        double endLong;
+
+        if (trajPoints.isEmpty())
+        {
+            startLat = config.centerLatitude + (Math.random()-0.5) * config.areaSize;
+            startLong = config.centerLongitude + (Math.random()-0.5) * config.areaSize;
+
+            // if fixed start and end locations not given, pick random values within area
+            if (config.startLatitude == null || config.startLongitude == null ||
+                    config.stopLatitude == null || config.stopLongitude == null)
+            {
+                startLat = config.centerLatitude + (Math.random()-0.5) * config.areaSize;
+                startLong = config.centerLongitude + (Math.random()-0.5) * config.areaSize;
+                endLat = config.centerLatitude + (Math.random()-0.5) * config.areaSize;
+                endLong = config.centerLongitude + (Math.random()-0.5) * config.areaSize;
+            }
+
+            // else use start/end locations provided in configuration
+            else
+            {
+                startLat = config.startLatitude;
+                startLong = config.startLongitude;
+                endLat = config.stopLatitude;
+                endLong = config.stopLongitude;
+            }
+        }
+        else
+        {
+            // restart from end of previous track
+            double[] lastPoint = trajPoints.get(trajPoints.size()-1);
+            startLat = lastPoint[0];
+            startLong = lastPoint[1];
+            endLat = config.centerLatitude + (Math.random()-0.5) * config.areaSize;
+            endLong = config.centerLongitude + (Math.random()-0.5) * config.areaSize;
+        }
+
+
+        try
+        {
+            // request directions using Google API
+            URL dirRequest = new URL(config.googleApiUrl + "?origin=" + startLat + "," + startLong +
+                    "&destination=" + endLat + "," + endLong + ((config.walkingMode) ? "&mode=walking" : ""));
+            log.debug("Google API request: " + dirRequest);
+            InputStream is = new BufferedInputStream(dirRequest.openStream());
+
+            // parse JSON track
+            JsonParser reader = new JsonParser();
+            JsonElement root = reader.parse(new InputStreamReader(is));
+            //System.out.println(root);
+            JsonArray routes = root.getAsJsonObject().get("routes").getAsJsonArray();
+            if (routes.size() == 0)
+                throw new Exception("No route available");
+
+            JsonElement polyline = routes.get(0).getAsJsonObject().get("overview_polyline");
+            String encodedData = polyline.getAsJsonObject().get("points").getAsString();
+
+            // decode polyline data
+            decodePoly(encodedData);
+            currentTrackPos = 0.0;
+            parentSensor.clearError();
+            return true;
+        }
+        catch (Exception e)
+        {
+            parentSensor.reportError("Error while retrieving Google directions", e);
+            trajPoints.clear();
+            try { Thread.sleep(60000L); }
+            catch (InterruptedException e1) {}
+            return false;
+        }
+    }
+
+
+    private void decodePoly(String encoded)
+    {
+        int index = 0, len = encoded.length();
+        int lat = 0, lon = 0;
+        trajPoints.clear();
+
+        while (index < len)
+        {
+            int b, shift = 0, result = 0;
+            do
+            {
+                b = encoded.charAt(index++) - 63;
+                result |= (b & 0x1f) << shift;
+                shift += 5;
+            }
+            while (b >= 0x20);
+            int dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+            lat += dlat;
+
+            shift = 0;
+            result = 0;
+            do
+            {
+                b = encoded.charAt(index++) - 63;
+                result |= (b & 0x1f) << shift;
+                shift += 5;
+            }
+            while (b >= 0x20);
+            int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
+            lon += dlng;
+
+            double[] p = new double[] {(double) lat / 1E5, (double) lon / 1E5};
+            trajPoints.add(p);
+        }
+        getParentModule().getConfiguration().location.lat = lat;
+        getParentModule().getConfiguration().location.lon = lon;
+    }
+
+
+    private double getObservedIntensity()
+    {
+        SimCBRNConfig config = getParentModule().getConfiguration();
+        int numSources = config.numSources;
+        double avgIntensity = 0;
+        for (int i = 0; i < numSources; i++)
+        {
+            avgIntensity += getParentModule().getConfiguration().source1.findObservedIntensity(config.location.lat,
+                    config.location.lon, config.location.alt);
+        }
+        return avgIntensity/numSources;
+    }
+
+
+    public int findThreatLevel()
+    {
+        if(threatLevel == 0) return 0;
+        else if (threatLevel > 0.00 && threatLevel <= 100) return 1;
+        else if (threatLevel > 100 && threatLevel <= 200) return 2;
+        else if (threatLevel > 200 && threatLevel <= 300) return 3;
+        else if (threatLevel > 300 && threatLevel <= 400) return 4;
+        else if (threatLevel > 400 && threatLevel <= 500) return 5;
+        else if (threatLevel > 500) return 6;
+        else return -1;
+    }
+
+    // TODO: add in low threat level here and as an allowable token
+    public String findThreatString()
+    {
+        if(threatLevel == min_threat)
+        {
+            return "NONE";
+        }
+        else if(threatLevel > min_threat && threatLevel <= max_threat/2)
+        {
+            return "MEDIUM";
+        }
+        else if(threatLevel > max_threat/2)
+        {
+            return "HIGH";
+        }
+        else
+        {
+            return null;
+        }
+    }
+
+
+    public void autoSetWarnStatus()
+    {
+        if (findThreatLevel() - preWarnStatus > 0.0 && findThreatLevel() > 0.0
+                && findThreatLevel() < 300)
+        {
+            warnStatus = "WARN";
+        }
+
+        else if (findThreatLevel() - preWarnStatus > 0.0 && findThreatLevel() >= 300)
+        {
+            warnStatus = "ALERT";
+        }
+        else if (findThreatLevel() - preWarnStatus < 0.0 && findThreatLevel() < 300
+                && warnStatus.equals("ALERT"))
+        {
+            warnStatus = "DEALERT";
+        }
+        else if (findThreatLevel() - preWarnStatus < 0.0 && findThreatLevel() == 0.0
+                && warnStatus.equals("WARN"))
+        {
+            warnStatus = "DEWARN";
+        }
+        else if(warnStatus.equals("DEALERT") && findThreatLevel() > 0.0
+                && findThreatLevel() < 300)
+        {
+            warnStatus = "WARN";
+        }
+        else if(warnStatus.equals("DEWARN") && findThreatLevel() == 0.0)
+        {
+            warnStatus = "NONE";
+        }
+        else
+        {
+            warnStatus = warnStatus;
+        }
+
+        preWarnStatus = findThreatLevel();
     }
 }
 
