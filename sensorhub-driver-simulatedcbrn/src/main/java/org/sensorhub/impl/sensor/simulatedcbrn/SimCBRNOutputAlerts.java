@@ -28,10 +28,7 @@ import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.List;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 import org.vast.swe.SWEHelper;
 
@@ -82,6 +79,8 @@ public class SimCBRNOutputAlerts extends AbstractSensorOutput<SimCBRNSensor>
 
     protected void init()
     {
+        trajPoints = new ArrayList<double[]>();
+
         SWEHelper fac = new SWEHelper();
 
         // Build SWE Common record structure
@@ -164,15 +163,15 @@ public class SimCBRNOutputAlerts extends AbstractSensorOutput<SimCBRNSensor>
     private void sendMeasurement()
     {
         double time = System.currentTimeMillis()/1000;
-
+        simulate();
 
         // Temperature sim (copied from FakeWeatherOutput)
         temp += variation(temp, tempRef, 0.001, 0.1);
         eventStatus = warnStatus;
-        agentClassStatus =
-        agentIDStatus =
-        numericalLevel =
-        stringLevel =
+        agentClassStatus = detectedAgent.getAgentClass();
+        agentIDStatus = detectedAgent.getAgentID();
+        numericalLevel = findThreatLevel();
+        stringLevel = findThreatString();
 
         // Build DataBlock
         DataBlock dataBlock = cbrnAlertData.createDataBlock();
@@ -258,7 +257,7 @@ public class SimCBRNOutputAlerts extends AbstractSensorOutput<SimCBRNSensor>
 
         // Get the intensity of the detected source
         threatLevel = getObservedIntensity();
-        detectedAgent = sources[0].getAgent();
+        detectedAgent = config.source1.getAgent();
         //detectedAgent = config.source1.getAgent();
     }
 

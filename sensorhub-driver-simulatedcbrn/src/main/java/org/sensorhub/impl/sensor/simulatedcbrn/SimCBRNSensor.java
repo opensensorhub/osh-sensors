@@ -37,12 +37,12 @@ public class SimCBRNSensor extends AbstractSensorModule<SimCBRNConfig>
 {
     SimCBRNOutputID idDataInterface;
     SimCBRNOutputAlerts alertsDataInterface;
-    SimCBRNOutputReadings readingsDataInterface;
+   // SimCBRNOutputReadings readingsDataInterface;
     SimCBRNOutputMaintenance maintDataInterface;
     SimCBRNOutputStatus statusDataInterface;
 
     // To create the simulated data for the sensor
-    CBRNSimulatedData simData = new CBRNSimulatedData(getConfiguration());
+    //CBRNSimulatedData simData = new CBRNSimulatedData(getConfiguration());
 
 
     @Override

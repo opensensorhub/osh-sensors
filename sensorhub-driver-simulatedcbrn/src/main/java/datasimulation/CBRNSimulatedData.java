@@ -37,7 +37,7 @@ public class CBRNSimulatedData {
 
 
 
-	public CBRNSimulatedData)
+	public CBRNSimulatedData()
 	{
 		sensorLoc = new double[]{0,0,0};
 		threatLevel = 0;

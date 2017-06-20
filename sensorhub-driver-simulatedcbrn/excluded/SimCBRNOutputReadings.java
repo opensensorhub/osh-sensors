@@ -14,7 +14,6 @@
  ******************************* END LICENSE BLOCK ***************************/
 package org.sensorhub.impl.sensor.simulatedcbrn;
 
-import datasimulation.CBRNSimulatedData;
 import net.opengis.swe.v20.*;
 import org.sensorhub.api.sensor.SensorDataEvent;
 import org.sensorhub.impl.sensor.AbstractSensorOutput;
@@ -125,7 +124,7 @@ public class SimCBRNOutputReadings extends AbstractSensorOutput<SimCBRNSensor>
 	// will need to do some of the simulation here save for later
 	private void sendMeasurement()
 	{
-		getParentModule().simData.update(getParentModule().getConfiguration());
+		/*getParentModule().simData.update(getParentModule().getConfiguration());
 		double time = System.currentTimeMillis()/1000;
 
 		// Temperature sim (copied from FakeWeatherOutput)
@@ -133,7 +132,7 @@ public class SimCBRNOutputReadings extends AbstractSensorOutput<SimCBRNSensor>
 		agentClassStatus = getParentModule().simData.getDetectedAgent().getAgentClass();
 		agentIDStatus = getParentModule().simData.getDetectedAgent().getAgentID();
 		numericalLevel = getParentModule().simData.findThreatLevel();
-		stringLevel = getParentModule().simData.findThreatString();
+		stringLevel = getParentModule().simData.findThreatString();*/
 
 		// Build DataBlock
 		DataBlock dataBlock = cbrnReadingData.createDataBlock();
