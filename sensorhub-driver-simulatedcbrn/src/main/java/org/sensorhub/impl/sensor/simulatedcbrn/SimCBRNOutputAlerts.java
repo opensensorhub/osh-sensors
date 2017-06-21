@@ -253,7 +253,20 @@ public class SimCBRNOutputAlerts extends AbstractSensorOutput<SimCBRNSensor>
     {
         SimCBRNConfig config = getParentModule().getConfiguration();
         // Update the sensor's location
-        generateRandomTrajectory();
+        if (trajPoints.isEmpty() || currentTrackPos >= trajPoints.size()-2)
+        {
+            if (!generateRandomTrajectory())
+                return;
+
+            // skip if generated traj is too small
+            if (trajPoints.size() < 2)
+            {
+                trajPoints.clear();
+                return;
+            }
+            //for (double[] p: trajPoints)
+            //     System.out.println(Arrays.toString(p));
+        }
 
         // Get the intensity of the detected source
         threatLevel = getObservedIntensity();
