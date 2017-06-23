@@ -21,15 +21,17 @@ import datasimulation.ChemAgent;
 import datasimulation.GPSsim;
 import datasimulation.PointSource;
 import net.opengis.swe.v20.*;
+import net.opengis.swe.v20.Vector;
 import org.sensorhub.impl.sensor.AbstractSensorOutput;
 import org.sensorhub.api.sensor.SensorDataEvent;
-
+import org.vast.swe.helper.GeoPosHelper;
 import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.*;
 
+import org.vast.swe.SWEConstants;
 import org.vast.swe.SWEHelper;
 
 public class SimCBRNOutputAlerts extends AbstractSensorOutput<SimCBRNSensor>
@@ -55,6 +57,7 @@ public class SimCBRNOutputAlerts extends AbstractSensorOutput<SimCBRNSensor>
     // For GPS simulation
     List<double[]> trajPoints;
     static double currentTrackPos;
+    double lat, lon, alt;
 
     // For Intensity calculations
     double preWarnStatus = 0;
@@ -79,6 +82,7 @@ public class SimCBRNOutputAlerts extends AbstractSensorOutput<SimCBRNSensor>
 
     protected void init()
     {
+        GeoPosHelper fac2 = new GeoPosHelper();
         trajPoints = new ArrayList<double[]>();
 
         SWEHelper fac = new SWEHelper();
@@ -156,6 +160,13 @@ public class SimCBRNOutputAlerts extends AbstractSensorOutput<SimCBRNSensor>
         // Temperature
         cbrnAlertData.addComponent("temp", fac.newQuantity("http://sensorml.com/ont/swe/property/Temperature", null, null, "Cel"));
 
+
+        //Sim location
+        Vector locVector = fac2.newLocationVectorLLA(SWEConstants.DEF_SENSOR_LOC);
+        locVector.setLabel("Location");
+        locVector.setDescription("Location measured by GPS device");
+        cbrnAlertData.addComponent("location", locVector);
+
         cbrnEncoding = fac.newTextEncoding(",", "\n");
     }
 
@@ -184,6 +195,9 @@ public class SimCBRNOutputAlerts extends AbstractSensorOutput<SimCBRNSensor>
         dataBlock.setStringValue(6, units);
         dataBlock.setStringValue(7, stringLevel);
         dataBlock.setDoubleValue(8, temp);
+        dataBlock.setDoubleValue(9, lat);
+        dataBlock.setDoubleValue(10, lon);
+        dataBlock.setDoubleValue(11, alt);
 
         //this method call is required to push data
         latestRecord = dataBlock;
@@ -267,6 +281,24 @@ public class SimCBRNOutputAlerts extends AbstractSensorOutput<SimCBRNSensor>
             //for (double[] p: trajPoints)
             //     System.out.println(Arrays.toString(p));
         }
+
+        // convert speed from km/h to lat/lon deg/s
+        double speed = config.vehicleSpeed / 20000 * 180 / 3600;
+        int trackIndex = (int)currentTrackPos;
+        double ratio = currentTrackPos - trackIndex;
+        double[] p0 = trajPoints.get(trackIndex);
+        double[] p1 = trajPoints.get(trackIndex+1);
+        double dLat = p1[0] - p0[0];
+        double dLon = p1[1] - p0[1];
+        double dist = Math.sqrt(dLat*dLat + dLon*dLon);
+
+        // compute new position
+        double time = System.currentTimeMillis() / 1000.;
+        this.lat = p0[0] + dLat*ratio;
+        this.lon = p0[1] + dLon*ratio;
+        this.alt = 193;
+
+        currentTrackPos += speed / dist;
 
         // Get the intensity of the detected source
         threatLevel = getObservedIntensity();
@@ -372,7 +404,7 @@ public class SimCBRNOutputAlerts extends AbstractSensorOutput<SimCBRNSensor>
             }
             while (b >= 0x20);
             int dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
-            lat += dlat;
+            this.lat += dlat;
 
             shift = 0;
             result = 0;
@@ -384,7 +416,7 @@ public class SimCBRNOutputAlerts extends AbstractSensorOutput<SimCBRNSensor>
             }
             while (b >= 0x20);
             int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
-            lon += dlng;
+            this.lon += dlng;
 
             double[] p = new double[] {(double) lat / 1E5, (double) lon / 1E5};
             trajPoints.add(p);
