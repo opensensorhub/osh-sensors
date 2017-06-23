@@ -306,7 +306,7 @@ public class SimCBRNOutputAlerts extends AbstractSensorOutput<SimCBRNSensor>
         //detectedAgent = config.source1.getAgent();
     }
 
-
+    @SuppressWarnings("Duplicates")
     private boolean generateRandomTrajectory()
     {
         SimCBRNConfig config = getParentModule().getConfiguration();
@@ -386,7 +386,7 @@ public class SimCBRNOutputAlerts extends AbstractSensorOutput<SimCBRNSensor>
         }
     }
 
-
+    @SuppressWarnings("Duplicates")
     private void decodePoly(String encoded)
     {
         int index = 0, len = encoded.length();
@@ -404,7 +404,7 @@ public class SimCBRNOutputAlerts extends AbstractSensorOutput<SimCBRNSensor>
             }
             while (b >= 0x20);
             int dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
-            this.lat += dlat;
+            lat += dlat;
 
             shift = 0;
             result = 0;
@@ -416,7 +416,7 @@ public class SimCBRNOutputAlerts extends AbstractSensorOutput<SimCBRNSensor>
             }
             while (b >= 0x20);
             int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
-            this.lon += dlng;
+            lon += dlng;
 
             double[] p = new double[] {(double) lat / 1E5, (double) lon / 1E5};
             trajPoints.add(p);
