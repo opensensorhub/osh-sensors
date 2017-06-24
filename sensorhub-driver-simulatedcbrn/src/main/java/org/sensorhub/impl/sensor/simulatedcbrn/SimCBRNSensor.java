@@ -17,8 +17,6 @@ package org.sensorhub.impl.sensor.simulatedcbrn;
 
 import org.sensorhub.api.common.SensorHubException;
 import org.sensorhub.impl.sensor.AbstractSensorModule;
-import org.sensorhub.impl.sensor.simulatedcbrn.SimCBRNOutputAlerts;
-import org.vast.sensorML.SMLHelper;
 
 
 /**
@@ -38,12 +36,12 @@ public class SimCBRNSensor extends AbstractSensorModule<SimCBRNConfig>
 {
     SimCBRNOutputID idDataInterface;
     SimCBRNOutputAlerts alertsDataInterface;
-    SimCBRNOutputReadings readingsDataInterface;
+   // SimCBRNOutputReadings readingsDataInterface;
     SimCBRNOutputMaintenance maintDataInterface;
     SimCBRNOutputStatus statusDataInterface;
 
     // To create the simulated data for the sensor
-    CBRNSimulatedData simData = CBRNSimulatedData.getInstance();
+    //CBRNSimulatedData simData = new CBRNSimulatedData(getConfiguration());
 
 
     @Override

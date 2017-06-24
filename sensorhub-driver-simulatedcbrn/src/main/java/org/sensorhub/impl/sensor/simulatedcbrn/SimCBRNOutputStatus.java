@@ -14,14 +14,16 @@
  ******************************* END LICENSE BLOCK ***************************/
 package org.sensorhub.impl.sensor.simulatedcbrn;
 
-import net.opengis.swe.v20.*;
+import net.opengis.swe.v20.DataBlock;
+import net.opengis.swe.v20.DataComponent;
+import net.opengis.swe.v20.DataEncoding;
 import org.sensorhub.api.sensor.SensorDataEvent;
 import org.sensorhub.impl.sensor.AbstractSensorOutput;
+import org.vast.swe.SWEHelper;
 
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
-import org.vast.swe.SWEHelper;
 
 
 public class SimCBRNOutputStatus extends AbstractSensorOutput<SimCBRNSensor>

@@ -15,6 +15,7 @@
 
 package org.sensorhub.impl.sensor.simulatedcbrn;
 
+import datasimulation.PointSource;
 import org.sensorhub.api.config.DisplayInfo;
 import org.sensorhub.api.config.DisplayInfo.Required;
 import org.sensorhub.api.sensor.PositionConfig.LLALocation;
@@ -32,6 +33,12 @@ public class SimCBRNConfig extends SensorConfig
     @DisplayInfo(desc = "Sensor Location")
     public LLALocation location = new LLALocation();
 
+    @DisplayInfo(desc = "Point Source 1")
+    public PointSource source1 = new PointSource(34.8308, -86.7228, 0, 600, "VX");
+
+    @DisplayInfo(desc = "Number of Sources")
+    public int numSources = 1;
+
 
     public SimCBRNConfig()
     {
@@ -39,6 +46,22 @@ public class SimCBRNConfig extends SensorConfig
         location.lon = -86.7228;
         location.alt = 0.000;
     }
+
+    public String googleApiUrl = "http://maps.googleapis.com/maps/api/directions/json";
+
+    // use these to add specific start and stop locations
+    public Double startLatitude = null;  // in degrees
+    public Double startLongitude = null;  // in degrees
+    public Double stopLatitude = null;  // in degrees
+    public Double stopLongitude = null;  // in degrees
+
+    // otherwise use these to generate random start and stop locations
+    public double centerLatitude = 34.7300; // in deg
+    public double centerLongitude = -86.5850; // in deg
+    public double areaSize = 0.1; // in deg
+
+    public double vehicleSpeed = 40; // km/h
+    public boolean walkingMode = false;
 
 
     @Override
