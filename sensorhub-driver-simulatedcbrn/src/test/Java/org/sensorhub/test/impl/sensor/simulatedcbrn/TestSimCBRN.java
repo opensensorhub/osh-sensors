@@ -15,8 +15,6 @@
 
 package org.sensorhub.test.impl.sensor.simulatedcbrn;
 
-import java.io.IOException;
-import java.util.UUID;
 import net.opengis.sensorml.v20.AbstractProcess;
 import net.opengis.swe.v20.DataComponent;
 import org.junit.After;
@@ -33,7 +31,11 @@ import org.vast.data.TextEncodingImpl;
 import org.vast.sensorML.SMLUtils;
 import org.vast.swe.AsciiDataWriter;
 import org.vast.swe.SWEUtils;
-import static org.junit.Assert.*;
+
+import java.io.IOException;
+import java.util.UUID;
+
+import static org.junit.Assert.assertTrue;
 
 
 /**

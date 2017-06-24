@@ -18,21 +18,19 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import datasimulation.ChemAgent;
-import datasimulation.GPSsim;
-import datasimulation.PointSource;
 import net.opengis.swe.v20.*;
 import net.opengis.swe.v20.Vector;
-import org.sensorhub.impl.sensor.AbstractSensorOutput;
 import org.sensorhub.api.sensor.SensorDataEvent;
+import org.sensorhub.impl.sensor.AbstractSensorOutput;
+import org.vast.swe.SWEConstants;
+import org.vast.swe.SWEHelper;
 import org.vast.swe.helper.GeoPosHelper;
+
 import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.*;
-
-import org.vast.swe.SWEConstants;
-import org.vast.swe.SWEHelper;
 
 public class SimCBRNOutputAlerts extends AbstractSensorOutput<SimCBRNSensor>
 {
@@ -421,8 +419,6 @@ public class SimCBRNOutputAlerts extends AbstractSensorOutput<SimCBRNSensor>
             double[] p = new double[] {(double) lat / 1E5, (double) lon / 1E5};
             trajPoints.add(p);
         }
-        getParentModule().getConfiguration().location.lat = lat;
-        getParentModule().getConfiguration().location.lon = lon;
     }
 
 

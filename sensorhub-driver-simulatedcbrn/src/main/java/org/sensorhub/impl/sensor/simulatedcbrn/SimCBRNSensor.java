@@ -15,7 +15,6 @@
 
 package org.sensorhub.impl.sensor.simulatedcbrn;
 
-import datasimulation.CBRNSimulatedData;
 import org.sensorhub.api.common.SensorHubException;
 import org.sensorhub.impl.sensor.AbstractSensorModule;
 

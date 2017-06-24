@@ -3,24 +3,16 @@ package datasimulation;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import net.opengis.swe.v20.DataBlock;
 import net.opengis.swe.v20.DataComponent;
 import net.opengis.swe.v20.DataEncoding;
-import net.opengis.swe.v20.Vector;
-import org.sensorhub.api.sensor.SensorDataEvent;
-import org.sensorhub.impl.sensor.AbstractSensorOutput;
-import org.vast.swe.SWEConstants;
-import org.vast.swe.helper.GeoPosHelper;
 
 import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * Created by Ian Patterson on 6/12/2017.
