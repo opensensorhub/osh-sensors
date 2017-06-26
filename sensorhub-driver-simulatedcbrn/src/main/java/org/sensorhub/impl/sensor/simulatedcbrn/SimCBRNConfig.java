@@ -30,8 +30,8 @@ public class SimCBRNConfig extends SensorConfig
     @DisplayInfo(desc = "Serial number of the sensor used to generate its unique ID")
     public String serialNumber = "BIR012345";
 
-    @DisplayInfo(desc = "Sensor Location")
-    public LLALocation location = new LLALocation();
+    /*@DisplayInfo(desc = "Sensor Location")
+    public LLALocation location = new LLALocation();*/
 
     @DisplayInfo(desc = "Point Source 1")
     public PointSource source1 = new PointSource(34.8308, -86.7228, 0, 600, "VX");
@@ -42,9 +42,9 @@ public class SimCBRNConfig extends SensorConfig
 
     public SimCBRNConfig()
     {
-        location.lat = 34.8308;
+        /*location.lat = 34.8308;
         location.lon = -86.7228;
-        location.alt = 0.000;
+        location.alt = 0.000;*/
     }
 
     public String googleApiUrl = "http://maps.googleapis.com/maps/api/directions/json";
@@ -64,6 +64,6 @@ public class SimCBRNConfig extends SensorConfig
     public boolean walkingMode = false;
 
 
-    @Override
-    public  LLALocation getLocation(){return location;}
+    /*@Override
+    public  LLALocation getLocation(){return location;}*/
 }

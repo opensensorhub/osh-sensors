@@ -429,8 +429,8 @@ public class SimCBRNOutputAlerts extends AbstractSensorOutput<SimCBRNSensor>
         double avgIntensity = 0;
         for (int i = 0; i < numSources; i++)
         {
-            avgIntensity += getParentModule().getConfiguration().source1.findObservedIntensity(config.location.lat,
-                    config.location.lon, config.location.alt);
+            avgIntensity += getParentModule().getConfiguration().source1.findObservedIntensity(lat,
+                    lon, alt);
         }
         return avgIntensity/numSources;
     }
