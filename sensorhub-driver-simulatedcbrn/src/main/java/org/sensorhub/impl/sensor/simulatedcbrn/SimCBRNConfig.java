@@ -34,18 +34,11 @@ public class SimCBRNConfig extends SensorConfig
     public LLALocation location = new LLALocation();*/
 
     @DisplayInfo(desc = "Point Source 1")
-    public PointSource source1 = new PointSource(34.8308, -86.7228, 0, 600, "VX");
+    public PointSource source1 = new PointSource(34.7278, -86.5887, 0, 600, "VX");
 
     @DisplayInfo(desc = "Number of Sources")
     public int numSources = 1;
 
-
-    public SimCBRNConfig()
-    {
-        /*location.lat = 34.8308;
-        location.lon = -86.7228;
-        location.alt = 0.000;*/
-    }
 
     public String googleApiUrl = "http://maps.googleapis.com/maps/api/directions/json";
 
@@ -56,12 +49,12 @@ public class SimCBRNConfig extends SensorConfig
     public Double stopLongitude = null;  // in degrees
 
     // otherwise use these to generate random start and stop locations
-    public double centerLatitude = 34.7300; // in deg
-    public double centerLongitude = -86.5850; // in deg
-    public double areaSize = 0.1; // in deg
+    public double centerLatitude = 34.7278; // in deg
+    public double centerLongitude = -86.5887; // in deg
+    public double areaSize = 0.01; // in deg
 
-    public double vehicleSpeed = 40; // km/h
-    public boolean walkingMode = false;
+    public double vehicleSpeed = 10; // km/h
+    public boolean walkingMode = true;
 
 
     /*@Override

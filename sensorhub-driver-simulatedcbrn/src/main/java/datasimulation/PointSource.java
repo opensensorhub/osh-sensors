@@ -63,10 +63,11 @@ public class PointSource
 
 	public double findObservedIntensity(double b_lat, double b_lon, double b_alt)
 	{
+		double scalar = 100;
 		// Distance between point source and observer
 		double dist = Math.sqrt(Math.pow((b_lat-lat),2)+Math.pow((b_lon-lon),2));
 		// intensity according to law of inverse squares
-		double obsInt = intensity / (4 * Math.PI * dist*dist);
+		double obsInt = intensity / (4 * scalar * Math.PI * dist*dist);
 		if (obsInt < 0.01) {obsInt = 0;}
 		return obsInt;
 	}
