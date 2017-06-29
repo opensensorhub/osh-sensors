@@ -155,6 +155,10 @@ public class SimCBRNOutputAlerts extends AbstractSensorOutput<SimCBRNSensor>
         alerts_HazardLevel.setConstraint(hazardLevels);
         cbrnAlertData.addComponent("hazard_level", alerts_HazardLevel);
 
+        // Continuous Reading
+        cbrnAlertData.addComponent("continuous reading", fac.newQuantity("http://sensorml.com/ont/swe/property/Continuous", null, null, null));
+
+
         // Temperature
         cbrnAlertData.addComponent("temp", fac.newQuantity("http://sensorml.com/ont/swe/property/Temperature", null, null, "Cel"));
 
@@ -192,10 +196,11 @@ public class SimCBRNOutputAlerts extends AbstractSensorOutput<SimCBRNSensor>
         dataBlock.setIntValue(5, numericalLevel);
         dataBlock.setStringValue(6, units);
         dataBlock.setStringValue(7, stringLevel);
-        dataBlock.setDoubleValue(8, temp);
-        dataBlock.setDoubleValue(9, lat);
-        dataBlock.setDoubleValue(10, lon);
-        dataBlock.setDoubleValue(11, alt);
+        dataBlock.setDoubleValue(8, threatLevel);
+        dataBlock.setDoubleValue(9, temp);
+        dataBlock.setDoubleValue(10, lat);
+        dataBlock.setDoubleValue(11, lon);
+        dataBlock.setDoubleValue(12, alt);
 
         //this method call is required to push data
         latestRecord = dataBlock;
@@ -260,7 +265,7 @@ public class SimCBRNOutputAlerts extends AbstractSensorOutput<SimCBRNSensor>
         return cbrnEncoding;
     }
 
-
+    @SuppressWarnings("Duplicates")
     private void simulate()
     {
         SimCBRNConfig config = getParentModule().getConfiguration();

@@ -67,7 +67,8 @@ public class PointSource
 		// Distance between point source and observer
 		double dist = Math.sqrt(Math.pow((b_lat-lat),2)+Math.pow((b_lon-lon),2));
 		// intensity according to law of inverse squares
-		double obsInt = intensity / (4 * scalar * Math.PI * dist*dist);
+		// double obsInt = intensity / (4 * scalar * Math.PI * dist*dist);
+		double obsInt = -intensity * 250 * dist + intensity;
 		if (obsInt < 0.01) {obsInt = 0;}
 		return obsInt;
 	}
