@@ -156,7 +156,7 @@ public class SimCBRNOutputAlerts extends AbstractSensorOutput<SimCBRNSensor>
         cbrnAlertData.addComponent("hazard_level", alerts_HazardLevel);
 
         // Continuous Reading
-        cbrnAlertData.addComponent("continuous reading", fac.newQuantity("http://sensorml.com/ont/swe/property/Continuous", null, null, null));
+        cbrnAlertData.addComponent("continuous", fac.newQuantity("http://sensorml.com/ont/swe/property/Continuous", null, null, null));
 
 
         // Temperature
