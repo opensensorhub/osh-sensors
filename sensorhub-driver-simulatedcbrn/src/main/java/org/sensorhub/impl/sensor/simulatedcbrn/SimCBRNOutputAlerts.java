@@ -460,15 +460,11 @@ public class SimCBRNOutputAlerts extends AbstractSensorOutput<SimCBRNSensor>
         {
             return "NONE";
         }
-        else if(threatLevel > min_threat && threatLevel <= max_threat / 3)
-        {
-            return "LOW";
-        }
-        else if(threatLevel > max_threat / 3 && threatLevel <= max_threat * 2 / 3)
+        else if(threatLevel > min_threat && threatLevel <= max_threat/2)
         {
             return "MEDIUM";
         }
-        else if(threatLevel > max_threat * 2 / 3)
+        else if(threatLevel > max_threat/2)
         {
             return "HIGH";
         }
