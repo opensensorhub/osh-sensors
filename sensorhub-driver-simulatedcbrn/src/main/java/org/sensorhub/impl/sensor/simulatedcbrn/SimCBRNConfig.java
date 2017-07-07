@@ -30,12 +30,6 @@ public class SimCBRNConfig extends SensorConfig
     @DisplayInfo(desc = "Serial number of the sensor used to generate its unique ID")
     public String serialNumber = "BIR012345";
 
-    /*@DisplayInfo(desc = "Sensor Location")
-    public LLALocation location = new LLALocation();*/
-
-    @DisplayInfo(desc = "Point Source 1")
-    public PointSource source1 = new PointSource(34.7278, -86.5887, 0, 600, "VX");
-
     @DisplayInfo(desc = "Number of Sources")
     public int numSources = 1;
 
@@ -56,7 +50,11 @@ public class SimCBRNConfig extends SensorConfig
     public double vehicleSpeed = 10; // km/h
     public boolean walkingMode = true;
 
+    // Point source vars for construction
+    public double src1_lat = 34.7278;
+    public double src1_lon = -86.5887;
+    public double src1_alt = 0;
+    public double src1_intensity = 600;
+    public String src1_type = "VX";
 
-    /*@Override
-    public  LLALocation getLocation(){return location;}*/
 }

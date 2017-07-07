@@ -18,6 +18,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import datasimulation.ChemAgent;
+import datasimulation.PointSource;
 import net.opengis.swe.v20.*;
 import net.opengis.swe.v20.Vector;
 import org.sensorhub.api.sensor.SensorDataEvent;
@@ -65,9 +66,19 @@ public class SimCBRNOutputAlerts extends AbstractSensorOutput<SimCBRNSensor>
     double max_threat = 600.0;
     ChemAgent detectedAgent;
 
+    PointSource source1;
+
+
+
     public SimCBRNOutputAlerts(SimCBRNSensor parentSensor)
     {
         super(parentSensor);
+        // Point Sources
+        this.source1 = new PointSource(parentSensor.getConfiguration().src1_lat,
+                parentSensor.getConfiguration().src1_lon,
+                parentSensor.getConfiguration().src1_alt,
+                parentSensor.getConfiguration().src1_intensity,
+                parentSensor.getConfiguration().src1_type);
     }
 
 
@@ -305,7 +316,7 @@ public class SimCBRNOutputAlerts extends AbstractSensorOutput<SimCBRNSensor>
 
         // Get the intensity of the detected source
         threatLevel = getObservedIntensity();
-        detectedAgent = config.source1.getAgent();
+        detectedAgent = source1.getAgent();
         //detectedAgent = config.source1.getAgent();
     }
 
@@ -434,7 +445,7 @@ public class SimCBRNOutputAlerts extends AbstractSensorOutput<SimCBRNSensor>
         double avgIntensity = 0;
         for (int i = 0; i < numSources; i++)
         {
-            avgIntensity += getParentModule().getConfiguration().source1.findObservedIntensity(lat,
+            avgIntensity += source1.findObservedIntensity(lat,
                     lon, alt);
         }
         return avgIntensity/numSources;
