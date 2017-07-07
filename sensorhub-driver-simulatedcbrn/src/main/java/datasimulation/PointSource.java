@@ -65,11 +65,13 @@ public class PointSource
 	{
 		double scalar = 100;
 		// Distance between point source and observer
-		double dist = Math.sqrt(Math.pow((b_lat-lat),2)+Math.pow((b_lon-lon),2));
+		//double dist = Math.sqrt(Math.pow((b_lat-lat),2)+Math.pow((b_lon-lon),2));
+		double dist = Haversine.haversine(b_lat, b_lon, lat, lon);
 		// intensity according to law of inverse squares
 		// double obsInt = intensity / (4 * scalar * Math.PI * dist*dist);
-		double obsInt = -intensity * 250 * dist + intensity;
-		if (obsInt < 0.01) {obsInt = 0;}
+		double obsInt = -intensity * 1 * dist + intensity;
+        //System.out.println(obsInt);
+        if (obsInt < 0.01) {obsInt = 0;}
 		return obsInt;
 	}
 }
