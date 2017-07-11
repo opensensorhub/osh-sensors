@@ -50,11 +50,25 @@ public class SimCBRNConfig extends SensorConfig
     public double vehicleSpeed = 10; // km/h
     public boolean walkingMode = true;
 
-    // Point source vars for construction
+    // Point source vars for construction of source 1
     public double src1_lat = 34.7278;
     public double src1_lon = -86.5887;
     public double src1_alt = 0;
     public double src1_intensity = 600;
     public String src1_type = "VX";
+
+    // Point source vars for construction source 2
+    public double src2_lat = 34.728592;
+    public double src2_lon = -86.588933;
+    public double src2_alt = 0;
+    public double src2_intensity = 600;
+    public String src2_type = "VX";
+
+    // Point source vars for construction source 3
+    public double src3_lat = 34.725528;
+    public double src3_lon = -86.590242;
+    public double src3_alt = 0;
+    public double src3_intensity = 600;
+    public String src3_type = "VX";
 
 }

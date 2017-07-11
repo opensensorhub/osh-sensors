@@ -67,6 +67,8 @@ public class SimCBRNOutputAlerts extends AbstractSensorOutput<SimCBRNSensor>
     ChemAgent detectedAgent;
 
     PointSource source1;
+    PointSource source2;
+    PointSource source3;
 
 
 
@@ -79,6 +81,18 @@ public class SimCBRNOutputAlerts extends AbstractSensorOutput<SimCBRNSensor>
                 parentSensor.getConfiguration().src1_alt,
                 parentSensor.getConfiguration().src1_intensity,
                 parentSensor.getConfiguration().src1_type);
+
+        this.source2 = new PointSource(parentSensor.getConfiguration().src2_lat,
+                parentSensor.getConfiguration().src2_lon,
+                parentSensor.getConfiguration().src2_alt,
+                parentSensor.getConfiguration().src2_intensity,
+                parentSensor.getConfiguration().src2_type);
+
+        this.source3 = new PointSource(parentSensor.getConfiguration().src3_lat,
+                parentSensor.getConfiguration().src3_lon,
+                parentSensor.getConfiguration().src3_alt,
+                parentSensor.getConfiguration().src3_intensity,
+                parentSensor.getConfiguration().src3_type);
     }
 
 
@@ -212,6 +226,9 @@ public class SimCBRNOutputAlerts extends AbstractSensorOutput<SimCBRNSensor>
         dataBlock.setDoubleValue(10, lat);
         dataBlock.setDoubleValue(11, lon);
         dataBlock.setDoubleValue(12, alt);
+        dataBlock.setStringValue(13, );
+        dataBlock.setStringValue(14);
+        dataBlock.setStringValue(15);
 
         //this method call is required to push data
         latestRecord = dataBlock;
