@@ -55,13 +55,16 @@ public class SimCBRNConfig extends SensorConfig
     public double src1_lon = -86.5887;
     public double src1_alt = 0;
     public double src1_intensity = 600;
+    public double src1_radius = 1;
     public String src1_type = "VX";
+
 
     // Point source vars for construction source 2
     public double src2_lat = 34.728592;
     public double src2_lon = -86.588933;
     public double src2_alt = 0;
     public double src2_intensity = 600;
+    public double src2_radius = 1;
     public String src2_type = "VX";
 
     // Point source vars for construction source 3
@@ -69,6 +72,7 @@ public class SimCBRNConfig extends SensorConfig
     public double src3_lon = -86.590242;
     public double src3_alt = 0;
     public double src3_intensity = 600;
+    public double src3_radius = 1;
     public String src3_type = "VX";
 
 }
