@@ -67,6 +67,10 @@ public class SimCBRNOutputAlerts extends AbstractSensorOutput<SimCBRNSensor>
     ChemAgent detectedAgent;
 
     PointSource source1;
+    PointSource source2;
+    PointSource source3;
+     String sourceCombo;
+     String sourceRadii;
 
 
 
@@ -78,7 +82,23 @@ public class SimCBRNOutputAlerts extends AbstractSensorOutput<SimCBRNSensor>
                 parentSensor.getConfiguration().src1_lon,
                 parentSensor.getConfiguration().src1_alt,
                 parentSensor.getConfiguration().src1_intensity,
-                parentSensor.getConfiguration().src1_type);
+                parentSensor.getConfiguration().src1_type,
+                parentSensor.getConfiguration().src1_radius);
+
+
+        this.source2 = new PointSource(parentSensor.getConfiguration().src2_lat,
+                parentSensor.getConfiguration().src2_lon,
+                parentSensor.getConfiguration().src2_alt,
+                parentSensor.getConfiguration().src2_intensity,
+                parentSensor.getConfiguration().src2_type,
+                parentSensor.getConfiguration().src1_radius);
+
+        this.source3 = new PointSource(parentSensor.getConfiguration().src3_lat,
+                parentSensor.getConfiguration().src3_lon,
+                parentSensor.getConfiguration().src3_alt,
+                parentSensor.getConfiguration().src3_intensity,
+                parentSensor.getConfiguration().src3_type,
+                parentSensor.getConfiguration().src1_radius);
     }
 
 
@@ -109,7 +129,7 @@ public class SimCBRNOutputAlerts extends AbstractSensorOutput<SimCBRNSensor>
         cbrnAlertData.addComponent("id", fac.newCategory("http://sensorml.com/ont/swe/property/SensorID",null,null,null));
 
         // To set up the event alert, must add set of allowed tokens
-        // TODO: Alert_Event does NOT generate an error
+
         Category alert_Event = fac.newCategory("http://sensorml.com/ont/swe/property/AlertEvent", null, null, null);
         AllowedTokens allowedEvents = fac.newAllowedTokens();
         allowedEvents.addValue("ALERT");
@@ -119,7 +139,7 @@ public class SimCBRNOutputAlerts extends AbstractSensorOutput<SimCBRNSensor>
         allowedEvents.addValue("NONE");
         alert_Event.setConstraint(allowedEvents);
         cbrnAlertData.addComponent("event", alert_Event);
-        // TODO: The Alert outputs below give errors when looking for RAW format data from the SOS Service
+
         // Agent Classes
         Category alert_AgentClass = fac.newCategory("http://sensorml.com/ont/swe/property/ChemicalAgentClass", null, null,null );
         AllowedTokens allowedAgentClasses = fac.newAllowedTokens();
@@ -180,6 +200,23 @@ public class SimCBRNOutputAlerts extends AbstractSensorOutput<SimCBRNSensor>
         locVector.setDescription("Location measured by GPS device");
         cbrnAlertData.addComponent("location", locVector);
 
+        // Point Source Combo data component
+        DataComponent psData = fac.newDataRecord();
+        psData.setName(getName());
+        psData.setDefinition("http://sensorml.com/ont/swe/property/PointSource");
+        psData.setDescription("Point Source Data");
+
+        // Point Source Combo String
+        Text source_string = fac.newText("http://sensorml.com/ont/swe/property/SourceStrings", null, null);
+        psData.addComponent("source_string", source_string);
+
+        // Point Source Combo String
+        Text source_radii = fac.newText("http://sensorml.com/ont/swe/property/SourceRadii", null, null);
+        psData.addComponent("source_radii", source_radii);
+        cbrnAlertData.addComponent("PointSource", psData);
+
+
+
         cbrnEncoding = fac.newTextEncoding(",", "\n");
     }
 
@@ -197,6 +234,12 @@ public class SimCBRNOutputAlerts extends AbstractSensorOutput<SimCBRNSensor>
         numericalLevel = findThreatLevel();
         stringLevel = findThreatString();
 
+        sourceCombo  = source1.getLat() + "," + source1.getLon() + "," + source1.getAlt() +
+                "," + source2.getLat() + "," + source2.getLon() + "," + source2.getAlt() +
+                "," + source3.getLat() + "," + source3.getLon() + "," + source3.getAlt();
+
+        sourceRadii = source1.getRadiusinKM() + "," + source2.getRadiusinKM() + "," + source3.getRadiusinKM();
+
         // Build DataBlock
         DataBlock dataBlock = cbrnAlertData.createDataBlock();
         dataBlock.setDoubleValue(0, time);
@@ -212,6 +255,9 @@ public class SimCBRNOutputAlerts extends AbstractSensorOutput<SimCBRNSensor>
         dataBlock.setDoubleValue(10, lat);
         dataBlock.setDoubleValue(11, lon);
         dataBlock.setDoubleValue(12, alt);
+        dataBlock.setStringValue(13, sourceCombo);
+        dataBlock.setStringValue(14,sourceRadii);
+
 
         //this method call is required to push data
         latestRecord = dataBlock;
